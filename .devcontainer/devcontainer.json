@@ -4,5 +4,9 @@
   "features": {
     "ghcr.io/devcontainers/features/ruby:1": {}
   },
-  "postCreateCommand": "gem install jekyll bundler"
+  "postCreateCommand": "gem install jekyll bundler",
+  "mounts": [
+    "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached"
+  ],
+  "remoteUser": "vscode"
 } 
