@@ -1,0 +1,34 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ site.title | escape }}</title>
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  <link rel="icon" href="{{ '/assets/Bitpanda_White_Horizontal.png' | relative_url }}" type="image/svg+xml">
+</head>
+<body>
+  <header>
+    <nav class="nav-container">
+      <div class="nav-brand">
+        <img src="{{ '/assets/Bitpanda_White_Horizontal.png' | relative_url }}" alt="Bitpanda Labs" class="logo">
+        <span class="site-title">Labs</span>
+      </div>
+      <div class="nav-links">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/#experiments" class="nav-link">Experiments</a>
+        <a href="/#about" class="nav-link">About</a>
+      </div>
+    </nav>
+  </header>
+  <main>
+    {{ content }}
+  </main>
+  <footer>
+    <ul>
+      <li><a href="/#about">About</a></li>
+      <li><a href="https://www.bitpanda.com/careers">Careers at Bitpanda</a></li>
+      <li><a href="https://www.bitpanda.com/legal">Legal</a></li>
+    </ul>
+  </footer>
+</body>
+</html> 

@@ -1,0 +1,8 @@
+{
+  "name": "Jekyll Development",
+  "image": "mcr.microsoft.com/devcontainers/ruby:3",
+  "features": {
+    "ghcr.io/devcontainers/features/ruby:1": {}
+  },
+  "postCreateCommand": "gem install jekyll bundler"
+} 

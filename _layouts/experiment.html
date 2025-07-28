@@ -1,0 +1,54 @@
+---
+layout: default
+---
+<div class="experiment-page">
+  <div class="breadcrumb">
+    <a href="/" class="breadcrumb-link">Home</a>
+    <span class="breadcrumb-separator">›</span>
+    <a href="/#experiments" class="breadcrumb-link">Experiments</a>
+    <span class="breadcrumb-separator">›</span>
+    <span class="breadcrumb-current">{{ page.title | escape }}</span>
+  </div>
+
+  <article class="experiment">
+    <header class="experiment-header">
+      <div class="experiment-meta">
+        <span class="experiment-tag">{{ page.categories[0] | default: "Experiment" }}</span>
+        <time class="experiment-date">{{ page.date | date: "%B %d, %Y" }}</time>
+      </div>
+      <h1 class="experiment-title">{{ page.title | escape }}</h1>
+      <div class="experiment-excerpt">
+        {{ page.excerpt | default: "Discover how we're pushing the boundaries of financial technology." }}
+      </div>
+    </header>
+
+    <div class="experiment-content">
+      <div class="content-wrapper">
+        {{ content }}
+      </div>
+      
+      <div class="experiment-footer">
+        <div class="back-to-experiments">
+          <a href="/#experiments" class="btn btn-outline">← Back to All Experiments</a>
+        </div>
+        
+        <div class="experiment-share">
+          <h4>Share this experiment</h4>
+          <div class="share-buttons">
+            <button class="share-btn" onclick="navigator.share ? navigator.share({title: '{{ page.title | escape }}', url: window.location.href}) : copyToClipboard(window.location.href)">
+              Share
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+</div>
+
+<script>
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text).then(() => {
+    alert('Link copied to clipboard!');
+  });
+}
+</script> 
