@@ -22,8 +22,8 @@ title: Bitpanda Labs
 email: 
 description: >- 
   Bitpanda Labs is the R&D division of Bitpanda, showcasing internal innovation, tech experiments, and product prototypes.
-baseurl: "/labs-website" 
-url: "https://bitpanda-labs.github.io" 
+baseurl: "" 
+url: "https://labs.bitpanda.com" 
 # twitter_username: jekyllrb
 # github_username:  jekyll
 
