@@ -110,7 +110,7 @@ main {
   text-align: center; 
   padding: 6rem 2rem; 
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  border-radius: 0 0 50px 50px;
+  border-radius: 50px;
   margin-bottom: 4rem;
 }
 
@@ -494,7 +494,7 @@ footer a:hover {
 @media (max-width: 768px) {
   .hero { 
     padding: 4rem 1rem;
-    border-radius: 0 0 30px 30px;
+    border-radius: 30px;
   }
   
   .cards { 
