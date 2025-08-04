@@ -4,19 +4,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ site.title | escape }}</title>
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
-  <link rel="icon" href="{{ '/assets/Bitpanda_White_Horizontal.png' | relative_url }}" type="image/svg+xml">
+  <link rel="icon" href="{{ '/favicon.svg' | relative_url }}" type="image/svg+xml">
 </head>
 <body>
   <header>
     <nav class="nav-container">
       <div class="nav-brand">
-        <img src="{{ '/assets/Bitpanda_White_Horizontal.png' | relative_url }}" alt="Bitpanda Labs" class="logo">
-        <span class="site-title">Labs</span>
+        <a href="/" class="brand-link">
+          <img src="{{ '/assets/Bitpanda_Lettermark_white_RGB.png' | relative_url }}" alt="Bitpanda Labs" class="logo">
+          <span class="site-title">Labs</span>
+        </a>
       </div>
       <div class="nav-links">
-        <a href="/" class="nav-link">Home</a>
-        <a href="/#experiments" class="nav-link">Experiments</a>
-        <a href="/#about" class="nav-link">About</a>
+        <a href="/" class="nav-link{% if page.url == '/' %} active{% endif %}">Home</a>
+        <a href="/#experiments" class="nav-link{% if page.url contains 'experiments' %} active{% endif %}">Experiments</a>
+        <a href="/#about" class="nav-link{% if page.url contains 'about' %} active{% endif %}">About
+        </a>
       </div>
     </nav>
   </header>
