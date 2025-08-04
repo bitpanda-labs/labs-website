@@ -16,10 +16,9 @@
         </a>
       </div>
       <div class="nav-links">
-        <a href="/" class="nav-link{% if page.url == '/' %} active{% endif %}">Home</a>
-        <a href="/#experiments" class="nav-link{% if page.url contains 'experiments' %} active{% endif %}">Experiments</a>
-        <a href="/#about" class="nav-link{% if page.url contains 'about' %} active{% endif %}">About
-        </a>
+        <a href="/" class="nav-link" data-section="">Home</a>
+        <a href="/#experiments" class="nav-link" data-section="experiments">Experiments</a>
+        <a href="/#about" class="nav-link" data-section="about">About</a>
       </div>
     </nav>
   </header>
@@ -36,5 +35,25 @@
       <li><a href="https://support.bitpanda.com/hc/en-us" target="_blank">Help</a></li>
     </ul>
   </footer>
+  <script>
+    // Handle active state for navigation links
+    function updateActiveLink() {
+      const hash = window.location.hash.slice(1) || '';
+      const links = document.querySelectorAll('.nav-link');
+      
+      links.forEach(link => {
+        const section = link.getAttribute('data-section');
+        if ((hash === '' && section === '') || (hash === section)) {
+          link.classList.add('active');
+        } else {
+          link.classList.remove('active');
+        }
+      });
+    }
+
+    // Update active link on page load and hash change
+    window.addEventListener('load', updateActiveLink);
+    window.addEventListener('hashchange', updateActiveLink);
+  </script>
 </body>
 </html> 
