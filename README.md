@@ -27,7 +27,7 @@ Bitpanda Labs showcases cutting-edge fintech experiments, research prototypes, a
 
 2. **Install dependencies:**
    ```bash
-   gem install jekyll bundler
+   sudo gem install jekyll bundler  -n /usr/local/bin
    bundle install
    ```
 

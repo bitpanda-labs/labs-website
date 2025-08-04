@@ -2,33 +2,35 @@
 layout: default
 ---
 <section class="hero">
-  <h1>Exploring the Future of Finance</h1>
-  <p>Bitpanda Labs: Bitpanda’s innovation playground for internal innovation, tech experiments, and product prototypes.</p>
-  <a href="#experiments" class="btn">See What We’re Building</a>
+  <h1>EXPLORING THE FUTURE OF FINANCE</h1>
+  <p>Bitpanda Labs: Bitpanda's innovation playground for internal innovation, tech experiments, and product prototypes.</p>
+  <a href="#experiments" class="btn">See What We're Building</a>
 </section>
 
-<section id="experiments">
-  <h2>Latest Experiments</h2>
-  <div class="cards">
-    {% if site.experiments.size > 0 %}
-      {% for experiment in site.experiments %}
-        <div class="card">
-          <h3>{{ experiment.title | escape }}</h3>
-          <p class="meta">{{ experiment.date | date: "%B %d, %Y" }}</p>
-          <p>{{ experiment.excerpt | strip_html | truncatewords: 30 }}</p>
-          <a href="{{ experiment.url | relative_url }}" class="btn">Read More</a>
+<div class="content-container">
+  <section id="experiments">
+    <h2>Latest Experiments</h2>
+    <div class="cards">
+      {% if site.experiments.size > 0 %}
+        {% for experiment in site.experiments %}
+          <div class="card">
+            <h3>{{ experiment.title | escape }}</h3>
+            <p class="meta">{{ experiment.date | date: "%B %d, %Y" }}</p>
+            <p>{{ experiment.excerpt | strip_html | truncatewords: 30 }}</p>
+            <a href="{{ experiment.url | relative_url }}" class="btn">Read More</a>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="card coming-soon">
+          <h3>Exciting Experiments Coming Soon</h3>
+          <p>Our innovation team is cooking up some groundbreaking experiments. Stay tuned for cutting-edge fintech.</p>
         </div>
-      {% endfor %}
-    {% else %}
-      <div class="card coming-soon">
-        <h3>Exciting Experiments Coming Soon</h3>
-        <p>Our innovation team is cooking up some groundbreaking experiments. Stay tuned for cutting-edge fintech.</p>
-      </div>
-    {% endif %}
-  </div>
-</section>
+      {% endif %}
+    </div>
+  </section>
 
-<section id="about">
-  <h2>About Bitpanda Labs</h2>
-  <p>Combining experimentation, user feedback, and fast prototyping to shape the future of digital finance.</p>
-</section> 
+  <section id="about">
+    <h2>About Bitpanda Labs</h2>
+    <p>Combining experimentation, user feedback, and fast prototyping to shape the future of digital finance.</p>
+  </section>
+</div> 

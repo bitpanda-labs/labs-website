@@ -1,12 +1,27 @@
 /* Bitpanda Colors */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@800&display=swap');
+@font-face {
+  font-family: 'Euclid Square';
+  src: url('../fonts/EuclidSquare-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Bitpanda Compressed';
+  src: url('../fonts/BitpandaCompressed_Desktop-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
 :root {
-  --panda-green: #00c853;
-  --panda-green-dark: #00a142;
+  --panda-green: #103e36;
+  --panda-green-dark: #103e36;
   --panda-black: #1a1a1a;
   --panda-white: #ffffff;
   --panda-grey: #f8f9fa;
   --panda-grey-dark: #6c757d;
-  --panda-gradient: linear-gradient(135deg, #00c853 0%, #00a142 100%);
+  --panda-gradient: linear-gradient(180deg, rgb(16, 62, 54) 0%, rgb(0, 0, 0) 100%);
   --shadow-light: 0 2px 20px rgba(0, 0, 0, 0.08);
   --shadow-medium: 0 8px 40px rgba(0, 0, 0, 0.12);
   --shadow-heavy: 0 16px 60px rgba(0, 0, 0, 0.15);
@@ -24,19 +39,22 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   line-height: 1.7; 
   color: var(--panda-black); 
-  background-color: var(--panda-white);
+  background-color: transparent;
   font-size: 16px;
   padding-top: 0;
+  margin: 0;
+  min-height: 100vh;
 }
 
 /* Header - Only the main navigation header */
 body > header { 
-  background: var(--panda-black); 
+  background: rgb(16, 24, 24);
   color: var(--panda-white); 
   padding: 1.5rem 2rem; 
-  box-shadow: var(--shadow-light);
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 1000;
 }
 
@@ -51,18 +69,33 @@ body > header {
 .nav-brand {
   display: flex;
   align-items: center;
+}
+
+.brand-link {
+  display: flex;
+  align-items: center;
   gap: 1rem;
+  text-decoration: none;
+  color: inherit;
+  transition: opacity 0.3s ease;
+}
+
+.brand-link:hover {
+  opacity: 0.9;
 }
 
 .logo { 
-  max-width: 120px; 
+  max-width: 24px; 
   height: auto;
 }
 
 .site-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--panda-green);
+  font-size: 2rem;
+  font-weight: 400;
+  color: var(--panda-white);
+  font-family: 'Euclid Square', sans-serif;
+  letter-spacing: 0.02em;
+  margin-left: 0.5rem;
 }
 
 .nav-links {
@@ -71,87 +104,101 @@ body > header {
 }
 
 .nav-link {
-  color: var(--panda-white);
+  color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
-  font-weight: 500;
-  transition: color 0.3s ease;
-  position: relative;
-}
-
-.nav-link::after {
-  content: '';
-  position: absolute;
-  width: 0;
-  height: 2px;
-  bottom: -5px;
-  left: 50%;
-  background: var(--panda-green);
+  font-weight: 400;
+  font-size: 0.9rem;
   transition: all 0.3s ease;
-  transform: translateX(-50%);
+  padding: 0.75rem 1.5rem;
+  display: inline-block;
+  border-radius: 8px;
+  margin: 0 0.25rem;
 }
 
 .nav-link:hover {
-  color: var(--panda-green);
+  color: var(--panda-white);
+  background: rgba(255, 255, 255, 0.15);
 }
 
-.nav-link:hover::after {
-  width: 100%;
+.nav-link.active {
+  color: var(--panda-white);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 /* Main */
 main { 
-  max-width: 1200px; 
-  margin: 0 auto; 
-  padding: 0 2rem; 
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: var(--panda-white);
+}
+
+/* Content container for sections after hero */
+.content-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
 }
 
 /* Hero Section */
 .hero { 
   text-align: center; 
   padding: 6rem 2rem; 
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  border-radius: 50px;
+  background: linear-gradient(90deg, rgb(16, 62, 54) 0%, rgb(0, 0, 0) 100%);
   margin-bottom: 4rem;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .hero h1 { 
-  font-size: clamp(2.5rem, 5vw, 4rem);
-  font-weight: 700; 
+  font-family: 'Bitpanda Compressed Bold', 'Bitpanda Compressed', sans-serif;
+  font-weight: 700 !important;
+  font-size: 110px !important;
+  line-height: 0.8;
+  letter-spacing: normal !important;
+  text-transform: uppercase;
   margin-bottom: 1.5rem;
-  background: var(--panda-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  line-height: 1.2;
+  color: var(--panda-white);
+  background: none;
+  -webkit-background-clip: unset;
+  -webkit-text-fill-color: unset;
 }
 
 .hero p { 
-  font-size: clamp(1.1rem, 2vw, 1.3rem);
-  margin-bottom: 2.5rem; 
-  color: var(--panda-grey-dark);
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  font-size: clamp(1.25rem, 2vw, 1.5rem);
+  line-height: 125%;
+  color: var(--panda-white);
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 2.5rem;
 }
 
 .btn { 
   display: inline-block; 
   padding: 1rem 2.5rem; 
-  background: var(--panda-gradient);
+  background: transparent;
   color: var(--panda-white); 
   text-decoration: none; 
-  border-radius: 50px; 
-  font-weight: 600;
-  font-size: 1.1rem;
+  border-radius: 100px; 
+  font-weight: 400;
+  font-size: 1rem;
   transition: all 0.3s ease;
-  box-shadow: var(--shadow-light);
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.8);
   cursor: pointer;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
 }
 
 .btn:hover { 
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-medium);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--panda-white);
 }
 
 .btn:active {
@@ -463,31 +510,17 @@ footer ul {
 }
 
 footer a { 
-  color: var(--panda-white); 
+  color: rgba(255, 255, 255, 0.6);
   text-decoration: none; 
-  transition: all 0.3s ease;
-  font-weight: 500;
-  position: relative;
-}
-
-footer a::after {
-  content: '';
-  position: absolute;
-  width: 0;
-  height: 2px;
-  bottom: -5px;
-  left: 50%;
-  background: var(--panda-green);
-  transition: all 0.3s ease;
-  transform: translateX(-50%);
-}
-
-footer a:hover::after {
-  width: 100%;
+  transition: color 0.3s ease;
+  font-weight: 400;
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  display: inline-block;
 }
 
 footer a:hover { 
-  color: var(--panda-green);
+  color: #2cec9a;
 }
 
 /* Responsive Design */
@@ -609,4 +642,26 @@ footer a:hover {
 
 .card:nth-child(3) {
   animation-delay: 0.2s;
+} 
+
+/* Selection styles */
+.hero ::selection {
+  background-color: var(--panda-white);
+  color: var(--panda-green);
+}
+
+.hero ::-moz-selection {
+  background-color: var(--panda-white);
+  color: var(--panda-green);
+}
+
+/* Default selection styles for rest of the site */
+::selection {
+  background-color: var(--panda-green);
+  color: var(--panda-white);
+}
+
+::-moz-selection {
+  background-color: var(--panda-green);
+  color: var(--panda-white);
 } 
