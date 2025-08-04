@@ -36,7 +36,7 @@
     </ul>
   </footer>
   <script>
-    // Handle active state for navigation links
+    // Handle active state and smooth scrolling for navigation links
     function updateActiveLink() {
       const hash = window.location.hash.slice(1) || '';
       const links = document.querySelectorAll('.nav-link');
@@ -50,6 +50,31 @@
         }
       });
     }
+
+    // Handle smooth scrolling
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href').slice(1);
+        if (!targetId) return;
+        
+        const targetElement = document.getElementById(targetId);
+        if (!targetElement) return;
+
+        const headerOffset = 100; // Adjust this value based on your header height
+        const elementPosition = targetElement.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+
+        // Update URL without scrolling
+        history.pushState(null, null, this.getAttribute('href'));
+        updateActiveLink();
+      });
+    });
 
     // Update active link on page load and hash change
     window.addEventListener('load', updateActiveLink);
