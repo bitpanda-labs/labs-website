@@ -29,13 +29,20 @@ url: "https://labs.bitpanda.com"
 
 # Build settings
 # theme: minima
-# plugins:
-#   - jekyll-feed
+plugins:
+  - jekyll-feed
 
 collections:
   experiments:
     output: true
     permalink: /experiments/:name/
+
+# Ensure these files are included in the build
+include:
+  - assets
+  - assets/fonts
+  - assets/css
+  - favicon.svg
 
 # Exclude from processing.
 # The following items will not be processed, by default.
