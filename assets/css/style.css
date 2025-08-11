@@ -282,7 +282,7 @@ section h2 {
 }
 
 /* Make the entire card clickable using an overlay link */
-.post-card { position: relative; }
+.post-card { position: relative; min-height: 600px; max-height: 600px; display: flex; flex-direction: column; }
 .post-card .card-link {
   position: absolute;
   inset: 0;
@@ -300,13 +300,15 @@ section h2 {
 
 .post-card .card-image {
   overflow: hidden;
-  border-radius: 0; /* let the parent card handle rounding */
+  border-radius: 24px 24px 0 0; /* visually match card top corners */
   /* Bleed the image fully over card padding and 1px border */
   margin-top: calc(-2rem - 1px);
   margin-right: calc(-2rem - 1px);
   margin-bottom: 1rem;
   margin-left: calc(-2rem - 1px);
   aspect-ratio: 16/9;
+  position: relative;
+  background: #eaeaea; /* neutral fallback to unify letterboxing before load */
 }
 
 .post-card .card-image img {
@@ -319,6 +321,17 @@ section h2 {
 .post-card .card-body {
   display: flex;
   flex-direction: column;
+  flex: 1 1 auto;
+}
+
+/* Card title styling to match design reference */
+.post-card .card-title {
+  font-family: 'Bitpanda Compressed', sans-serif;
+  font-size: 36px;
+  color: var(--panda-green);
+  font-weight: 700;
+  line-height: 0.9;
+  text-transform: uppercase;
 }
 
 .post-card .card-meta {
