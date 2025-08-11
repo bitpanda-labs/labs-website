@@ -51,11 +51,12 @@
       });
     }
 
-    // Handle smooth scrolling
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    // Handle smooth scrolling (supports href="#id" and href="/#id")
+    document.querySelectorAll('a[href^="#"], a[href^="/#"]').forEach(anchor => {
       anchor.addEventListener('click', function (e) {
         e.preventDefault();
-        const targetId = this.getAttribute('href').slice(1);
+        const rawHref = this.getAttribute('href');
+        const targetId = rawHref.replace(/^\/#/, '').replace(/^#/, '');
         if (!targetId) return;
         
         const targetElement = document.getElementById(targetId);
@@ -71,10 +72,26 @@
         });
 
         // Update URL without scrolling
-        history.pushState(null, null, this.getAttribute('href'));
+        history.pushState(null, null, '#' + targetId);
         updateActiveLink();
       });
     });
+
+    // Smooth-scroll to top when clicking Home while already on the homepage
+    (function() {
+      const rootPath = '{{ "/" | relative_url }}';
+      const homeLinks = document.querySelectorAll(`a.nav-link[href="${rootPath}"]`);
+      homeLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          if (window.location.pathname === rootPath) {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            history.pushState(null, null, rootPath);
+            updateActiveLink();
+          }
+        });
+      });
+    })();
 
     // Update active link on page load and hash change
     window.addEventListener('load', updateActiveLink);
