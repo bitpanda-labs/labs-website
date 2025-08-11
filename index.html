@@ -10,10 +10,13 @@ layout: default
 <div class="content-container">
   <section id="experiments">
     <h2>Latest Experiments</h2>
-    <div class="cards">
-      {% if site.experiments.size > 0 %}
-        {% assign experiments_sorted = site.experiments | sort: 'date' | reverse %}
-        {% for experiment in experiments_sorted %}
+    {% if site.experiments.size > 0 %}
+      {% assign experiments_sorted = site.experiments | sort: 'date' | reverse %}
+      <div class="carousel" aria-label="Latest experiments carousel" id="experiments-carousel">
+        <div class="carousel-track" id="experiments-track">
+        {% for experiment in experiments_sorted limit:5 %}
+          <div class="carousel-item">
+            
           {% comment %}Use front-matter image; resolve bare filenames relative to the experiment folder. Let the browser fall back to default on error.{% endcomment %}
           {% assign default_img = '/assets/img/image.jpg' %}
           {% assign image_value = experiment.image %}
@@ -53,14 +56,26 @@ layout: default
               </div>
             </div>
           </article>
+          </div>
         {% endfor %}
-      {% else %}
-        <div class="card coming-soon">
-          <h3>Exciting Experiments Coming Soon</h3>
-          <p>Our innovation team is cooking up some groundbreaking experiments. Stay tuned for cutting-edge fintech.</p>
+        </div>
+        <div class="carousel-dots" id="experiments-dots">
+          {% for experiment in experiments_sorted limit:5 %}
+            <button class="carousel-dot{% if forloop.first %} active{% endif %}" type="button" aria-label="Go to slide {{ forloop.index }}" data-index="{{ forloop.index0 }}"></button>
+          {% endfor %}
+        </div>
+      </div>
+      {% if site.experiments.size > 5 %}
+        <div class="see-all">
+          <a href="{{ '/experiments/' | relative_url }}" class="btn btn-outline">See all experiments</a>
         </div>
       {% endif %}
-    </div>
+    {% else %}
+      <div class="card coming-soon">
+        <h3>Exciting Experiments Coming Soon</h3>
+        <p>Our innovation team is cooking up some groundbreaking experiments. Stay tuned for cutting-edge fintech.</p>
+      </div>
+    {% endif %}
   </section>
 
   <section id="about">
@@ -68,3 +83,89 @@ layout: default
     <p>Combining experimentation, user feedback, and fast prototyping to shape the future of digital finance.</p>
   </section>
 </div> 
+
+<script>
+  (function() {
+    const carousel = document.getElementById('experiments-carousel');
+    const track = document.getElementById('experiments-track');
+    const dotsContainer = document.getElementById('experiments-dots');
+    if (!carousel || !track || !dotsContainer) return;
+    const dots = Array.from(dotsContainer.querySelectorAll('.carousel-dot'));
+    const total = dots.length;
+    let idx = 0;
+    let timerId;
+
+    // If 3 items or fewer, do not rotate and hide dots
+    if (total <= 3) {
+      dotsContainer.style.display = 'none';
+      return;
+    }
+
+    function getStep() {
+      const item = track.querySelector('.carousel-item');
+      if (!item) return 300;
+      const style = getComputedStyle(track);
+      const gap = parseInt(style.columnGap || style.gap || 0, 10) || 32;
+      return item.getBoundingClientRect().width + gap;
+    }
+
+    function updateDots() {
+      dots.forEach((d, i) => {
+        d.classList.toggle('active', i === idx);
+        d.setAttribute('aria-current', i === idx ? 'true' : 'false');
+      });
+    }
+
+    function nextCircular() {
+      const step = getStep();
+      track.scrollBy({ left: step, behavior: 'smooth' });
+      // After the scroll animation, move the first item to the end and correct scrollLeft
+      setTimeout(() => {
+        const first = track.firstElementChild;
+        if (first) {
+          track.appendChild(first);
+          track.scrollLeft -= step; // keep visual position continuous
+        }
+      }, 450);
+      idx = (idx + 1) % total;
+      updateDots();
+    }
+
+    function prevCircular() {
+      const step = getStep();
+      const last = track.lastElementChild;
+      if (last) {
+        track.insertBefore(last, track.firstElementChild);
+        track.scrollLeft += step; // shift to show the same item after prepending
+      }
+      track.scrollBy({ left: -step, behavior: 'smooth' });
+      idx = (idx - 1 + total) % total;
+      updateDots();
+    }
+
+    function startAuto() { stopAuto(); timerId = setInterval(nextCircular, 5000); }
+    function stopAuto() { if (timerId) { clearInterval(timerId); timerId = null; } }
+
+    // Dots navigation: jump to selected by rotating DOM minimal steps
+    dots.forEach((dot, targetIdx) => {
+      dot.addEventListener('click', () => {
+        stopAuto();
+        let diff = (targetIdx - idx + total) % total;
+        if (diff === 0) { startAuto(); return; }
+        const stepDelay = 350;
+        function stepOnce(remaining) {
+          if (remaining <= 0) { startAuto(); return; }
+          nextCircular();
+          setTimeout(() => stepOnce(remaining - 1), stepDelay);
+        }
+        stepOnce(diff);
+      });
+    });
+
+    carousel.addEventListener('mouseenter', stopAuto);
+    carousel.addEventListener('mouseleave', startAuto);
+
+    updateDots();
+    startAuto();
+  })();
+</script>
