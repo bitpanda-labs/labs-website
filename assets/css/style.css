@@ -243,7 +243,7 @@ section h2 {
   grid-auto-flow: column;
   grid-auto-columns: calc((100% - 2rem * 2) / 3); /* exactly 3 cards visible with 2 gaps */
   gap: 2rem;
-  overflow-x: auto;
+  overflow-x: hidden; /* hide during animated scrolls to avoid weirdbars */
   scroll-snap-type: x mandatory;
   padding: 0; /* no arrow padding needed */
   /* Hide scrollbar across browsers */

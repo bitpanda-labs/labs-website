@@ -17,20 +17,24 @@ layout: default
         {% for experiment in experiments_sorted limit:5 %}
           <div class="carousel-item">
             
-          {% comment %}Use front-matter image; resolve bare filenames relative to the experiment folder. Let the browser fall back to default on error.{% endcomment %}
+          {% comment %}Prefer image.png or image.jpg inside the experiment folder if available; otherwise use default asset. Supports absolute URLs via front matter.
+          Images under _experiments need to be listed in _config.yml include to be available at runtime.
+          {% endcomment %}
           {% assign default_img = '/assets/img/image.jpg' %}
-          {% assign image_value = experiment.image %}
-          {% assign base_url = experiment.url | replace: 'index.html', '' | replace: '/index/', '/' | replace: 'index/', '' %}
-          {% if image_value %}
-            {% if image_value contains '://' %}
-              {% assign card_image = image_value %}
-            {% elsif image_value contains '/' %}
-              {% assign card_image = image_value %}
-            {% else %}
-              {% assign card_image = base_url | append: image_value %}
-            {% endif %}
+          {% assign card_image = default_img %}
+          {% if experiment.image and (experiment.image contains '://' or experiment.image contains '/assets/' or experiment.image contains '/images/') %}
+            {% assign card_image = experiment.image %}
           {% else %}
-            {% assign card_image = default_img %}
+            {% assign slug = experiment.path | replace: '_experiments/', '' | replace: '/index.md', '' %}
+            {% assign png_static = '/_experiments/' | append: slug | append: '/image.png' %}
+            {% assign jpg_static = '/_experiments/' | append: slug | append: '/image.jpg' %}
+            {% assign has_png = site.static_files | where: 'path', png_static | first %}
+            {% assign has_jpg = site.static_files | where: 'path', jpg_static | first %}
+            {% if has_png %}
+              {% assign card_image = png_static %}
+            {% elsif has_jpg %}
+              {% assign card_image = jpg_static %}
+            {% endif %}
           {% endif %}
           {% assign labels = experiment.labels | default: experiment.categories %}
           <article class="card post-card">
@@ -52,7 +56,8 @@ layout: default
               </div>
               <p class="card-description">{{ experiment.excerpt | strip_html }}</p>
               <div class="card-actions">
-                <a href="{{ experiment.url | relative_url }}" class="btn btn-outline">Learn more</a>
+                {% assign cta_text = experiment.action | default: 'Learn more' %}
+                <a href="{{ experiment.url | relative_url }}" class="btn btn-outline">{{ cta_text }}</a>
               </div>
             </div>
           </article>
@@ -91,8 +96,10 @@ layout: default
     const dotsContainer = document.getElementById('experiments-dots');
     if (!carousel || !track || !dotsContainer) return;
     const dots = Array.from(dotsContainer.querySelectorAll('.carousel-dot'));
-    const total = dots.length;
-    let idx = 0;
+    const items = Array.from(track.querySelectorAll('.carousel-item'));
+    const total = items.length;
+    let pages = 1; // will be computed from layout
+    let idx = 0;   // current page index (0..pages-1)
     let timerId;
 
     // If 3 items or fewer, do not rotate and hide dots
@@ -101,71 +108,63 @@ layout: default
       return;
     }
 
-    function getStep() {
-      const item = track.querySelector('.carousel-item');
-      if (!item) return 300;
-      const style = getComputedStyle(track);
-      const gap = parseInt(style.columnGap || style.gap || 0, 10) || 32;
-      return item.getBoundingClientRect().width + gap;
-    }
-
     function updateDots() {
+      const activeDots = dots.slice(0, pages);
       dots.forEach((d, i) => {
+        d.style.display = i < pages ? '' : 'none';
         d.classList.toggle('active', i === idx);
         d.setAttribute('aria-current', i === idx ? 'true' : 'false');
       });
     }
 
-    function nextCircular() {
-      const step = getStep();
-      track.scrollBy({ left: step, behavior: 'smooth' });
-      // After the scroll animation, move the first item to the end and correct scrollLeft
-      setTimeout(() => {
-        const first = track.firstElementChild;
-        if (first) {
-          track.appendChild(first);
-          track.scrollLeft -= step; // keep visual position continuous
-        }
-      }, 450);
-      idx = (idx + 1) % total;
+    function getMetrics() {
+      const item = items[0];
+      if (!item) return { visible: 1, pages: 1 };
+      const style = getComputedStyle(track);
+      const gap = parseInt(style.columnGap || style.gap || 0, 10) || 0;
+      const itemWidth = item.getBoundingClientRect().width;
+      const step = itemWidth + gap;
+      const approxVisible = Math.max(1, Math.round((track.clientWidth + gap) / step));
+      const computedPages = Math.max(1, total - approxVisible + 1);
+      return { visible: approxVisible, pages: computedPages };
+    }
+
+    function syncPages() {
+      const m = getMetrics();
+      pages = m.pages;
+      if (idx >= pages) idx = pages - 1;
       updateDots();
     }
 
-    function prevCircular() {
-      const step = getStep();
-      const last = track.lastElementChild;
-      if (last) {
-        track.insertBefore(last, track.firstElementChild);
-        track.scrollLeft += step; // shift to show the same item after prepending
-      }
-      track.scrollBy({ left: -step, behavior: 'smooth' });
-      idx = (idx - 1 + total) % total;
+    function scrollToIndex(newIdx) {
+      syncPages();
+      idx = (newIdx % pages + pages) % pages;
+      const target = items[idx];
+      if (!target) return;
+      const x = target.offsetLeft;
+      track.scrollTo({ left: x, behavior: 'smooth' });
       updateDots();
     }
 
-    function startAuto() { stopAuto(); timerId = setInterval(nextCircular, 5000); }
+    function startAuto() { stopAuto(); timerId = setInterval(() => scrollToIndex(idx + 1), 5000); }
     function stopAuto() { if (timerId) { clearInterval(timerId); timerId = null; } }
 
-    // Dots navigation: jump to selected by rotating DOM minimal steps
+    // Dots navigation: scroll directly to the chosen slide
     dots.forEach((dot, targetIdx) => {
       dot.addEventListener('click', () => {
         stopAuto();
-        let diff = (targetIdx - idx + total) % total;
-        if (diff === 0) { startAuto(); return; }
-        const stepDelay = 350;
-        function stepOnce(remaining) {
-          if (remaining <= 0) { startAuto(); return; }
-          nextCircular();
-          setTimeout(() => stepOnce(remaining - 1), stepDelay);
-        }
-        stepOnce(diff);
+        scrollToIndex(targetIdx);
+        startAuto();
       });
     });
 
     carousel.addEventListener('mouseenter', stopAuto);
     carousel.addEventListener('mouseleave', startAuto);
 
-    updateDots();
+    syncPages();
+    scrollToIndex(0);
     startAuto();
+    // Keep alignment after resize
+    window.addEventListener('resize', () => { syncPages(); scrollToIndex(idx); });
   })();
 </script>

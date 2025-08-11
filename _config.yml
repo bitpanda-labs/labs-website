@@ -43,6 +43,7 @@ include:
   - assets/fonts
   - assets/css
   - favicon.svg
+  - _experiments
 
 # Exclude from processing.
 # The following items will not be processed, by default.
