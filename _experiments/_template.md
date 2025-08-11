@@ -3,7 +3,7 @@ layout: experiment
 title: "Your Experiment Title"
 date: YYYY-MM-DD
 categories: ["Category 1", "Category 2"]
-excerpt: "A brief summary of your experiment that will appear on the homepage. Keep it concise and engaging."
+excerpt: " One sentence summary of your experiment that will appear on the homepage."
 ---
 
 ## The Challenge/Idea
