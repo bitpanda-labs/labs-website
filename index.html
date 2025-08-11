@@ -13,12 +13,35 @@ layout: default
     <div class="cards">
       {% if site.experiments.size > 0 %}
         {% for experiment in site.experiments %}
-          <div class="card">
-            <h3>{{ experiment.title | escape }}</h3>
-            <p class="meta">{{ experiment.date | date: "%B %d, %Y" }}</p>
-            <p>{{ experiment.excerpt | strip_html | truncatewords: 30 }}</p>
-            <a href="{{ experiment.url | relative_url }}" class="btn">Read More</a>
-          </div>
+          {% comment %}Simple client-side fallback: try image.png, if it fails try image.jpg, else default asset{% endcomment %}
+          {% assign base_url = experiment.url | replace: 'index.html', '' | replace: '/index/', '/' | replace: 'index/', '' %}
+          {% assign png_path = base_url | append: 'image.png' %}
+          {% assign jpg_path = base_url | append: 'image.jpg' %}
+          {% assign default_img = '/assets/img/image.png' %}
+          {% assign labels = experiment.labels | default: experiment.categories %}
+          <article class="card post-card">
+            <a class="card-link" href="{{ experiment.url | relative_url }}" aria-label="Open {{ experiment.title | escape }}"></a>
+            <div class="card-image">
+              <img src="{{ png_path | relative_url }}" alt="{{ experiment.title | escape }}" onerror="this.onerror=() => (this.onerror=null, this.src='{{ default_img | relative_url }}'); this.src='{{ jpg_path | relative_url }}'" />
+            </div>
+            <div class="card-body">
+              <h3 class="card-title">{{ experiment.title | upcase }}</h3>
+              <div class="card-meta">
+                <div class="labels">
+                  {% if labels %}
+                    {% for label in labels %}
+                      <span class="label">{{ label }}</span>
+                    {% endfor %}
+                  {% endif %}
+                </div>
+                <time class="date">{{ experiment.date | date: "%B %d, %Y" }}</time>
+              </div>
+              <p class="card-description">{{ experiment.excerpt | strip_html }}</p>
+              <div class="card-actions">
+                <a href="{{ experiment.url | relative_url }}" class="btn btn-outline">Learn more</a>
+              </div>
+            </div>
+          </article>
         {% endfor %}
       {% else %}
         <div class="card coming-soon">

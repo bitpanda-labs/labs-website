@@ -227,57 +227,49 @@ section h2 {
 /* Cards Grid */
 .cards { 
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 2rem; 
   margin-top: 3rem;
 }
 
 .card { 
-  background: var(--panda-white); 
-  padding: 2.5rem; 
-  border-radius: 20px; 
+  background: #f3f3f2; 
+  padding: 2rem; 
+  border-radius: 24px; 
   box-shadow: var(--shadow-light);
-  transition: all 0.3s ease;
-  border: 1px solid rgba(0, 200, 83, 0.1);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  border: 1px solid rgba(0, 0, 0, 0.06);
   position: relative;
   overflow: hidden;
 }
 
-.card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: var(--panda-gradient);
-}
+.card::before { display: none; }
 
 .card:hover { 
-  transform: translateY(-8px);
-  box-shadow: var(--shadow-heavy);
-  border-color: rgba(0, 200, 83, 0.2);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-medium);
 }
 
 .card h3 { 
-  font-family: 'Inter', sans-serif;
-  font-size: clamp(16pt, 4vw, 24pt);
+  font-family: 'Bitpanda Compressed', sans-serif;
+  font-size: clamp(24pt, 5vw, 40pt);
   margin-bottom: 1rem; 
   color: var(--panda-green);
-  font-weight: 800;
-  line-height: 125%;
+  font-weight: 700;
+  line-height: 0.9;
+  text-transform: uppercase;
 }
 
 .card .meta { 
   font-size: 0.9rem; 
   color: var(--panda-grey-dark); 
-  margin-bottom: 1.5rem;
+  margin-top: 1rem;
   font-weight: 500;
 }
 
 .card p {
   color: var(--panda-grey-dark);
-  margin-bottom: 2rem;
+  margin-bottom: 1.25rem;
   font-family: 'Inter', sans-serif;
   font-weight: 400;
   font-size: 12pt;
@@ -287,6 +279,121 @@ section h2 {
 .card .btn {
   padding: 0.8rem 2rem;
   font-size: 0.95rem;
+}
+
+/* Make the entire card clickable using an overlay link */
+.post-card { position: relative; }
+.post-card .card-link {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+.post-card .card-body,
+.post-card .card-image { position: relative; z-index: 2; }
+.post-card .card-actions .btn { position: relative; z-index: 3; }
+
+/* Vertical post-style card (image on top) */
+.post-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.post-card .card-image {
+  overflow: hidden;
+  border-radius: 0; /* let the parent card handle rounding */
+  /* Bleed the image fully over card padding and 1px border */
+  margin-top: calc(-2rem - 1px);
+  margin-right: calc(-2rem - 1px);
+  margin-bottom: 1rem;
+  margin-left: calc(-2rem - 1px);
+  aspect-ratio: 16/9;
+}
+
+.post-card .card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.post-card .card-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.post-card .card-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.4rem;
+  margin: 0.25rem 0 0.75rem 0;
+}
+
+.labels { 
+  display: flex; 
+  flex-wrap: nowrap; 
+  gap: 0.5rem; 
+  overflow: hidden;
+}
+
+.label {
+  background: rgba(16, 62, 54, 0.08);
+  color: var(--panda-green);
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.date {
+  color: var(--panda-grey-dark);
+  font-size: 0.9rem;
+}
+
+/* Product-style card layout */
+.product-card {
+  position: relative;
+  display: block;
+  min-height: 520px;
+}
+
+.product-card .card-content {
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  z-index: 1;
+}
+
+.product-card .card-title {
+  margin-bottom: 1rem;
+}
+
+.product-card .card-description {
+  font-size: 1.125rem;
+  line-height: 140%;
+}
+
+.product-card .card-actions {
+  margin-top: 0.75rem;
+}
+
+.product-card .card-media {
+  position: absolute;
+  right: -2rem; /* bleed over card padding to reach the edge */
+  bottom: -2rem; /* bleed over bottom padding */
+  width: 65%;
+  height: 85%;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.product-card .card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: right bottom;
 }
 
 /* Experiment Page */
@@ -554,9 +661,25 @@ footer a:hover {
     border-radius: 30px;
   }
   
-  .cards { 
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+  .cards { grid-template-columns: 1fr; gap: 1.5rem; }
+  .post-card .card-image { margin: -1.5rem -1.5rem 1rem -1.5rem; aspect-ratio: 4/3; }
+
+  .product-card {
+    min-height: 420px;
+  }
+  .product-card .card-content {
+    max-width: 100%;
+  }
+  .product-card .card-media {
+    position: static;
+    width: 100%;
+    height: auto;
+    margin-top: 1rem;
+    pointer-events: auto;
+  }
+  .product-card .card-media img {
+    width: 100%;
+    height: auto;
   }
   
   .card {

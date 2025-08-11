@@ -13,7 +13,16 @@ layout: default
   <article class="experiment">
     <header class="experiment-header">
       <div class="experiment-meta">
-        <span class="experiment-tag">{{ page.categories[0] | default: "Experiment" }}</span>
+        <div class="labels">
+          {% assign labels = page.labels | default: page.categories %}
+          {% if labels %}
+            {% for label in labels %}
+              <span class="label">{{ label }}</span>
+            {% endfor %}
+          {% else %}
+            <span class="label">Experiment</span>
+          {% endif %}
+        </div>
         <time class="experiment-date">{{ page.date | date: "%B %d, %Y" }}</time>
       </div>
       <h1 class="experiment-title">{{ page.title | escape }}</h1>
