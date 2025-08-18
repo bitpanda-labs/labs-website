@@ -48,7 +48,11 @@ permalink: /about/
         <h2>Join the Innovation</h2>
         <p>Ready to explore the future of finance with us? Discover our latest experiments and see how we're pushing the boundaries of what's possible in fintech.</p>
         <div class="about-actions">
-          <a href="/experiments" class="btn btn-outline">Explore Experiments</a>
+          {% if site.experiments.size > 0 %}
+            <a href="/experiments" class="btn btn-outline">Explore Experiments</a>
+          {% else %}
+            <a href="/#experiments" class="btn btn-outline">Explore Experiments</a>
+          {% endif %}
         </div>
       </div>
     </div>
