@@ -10,27 +10,148 @@ layout: default
 <div class="content-container">
   <section id="experiments">
     <h2>Latest Experiments</h2>
-    <div class="cards">
-      {% if site.experiments.size > 0 %}
-        {% for experiment in site.experiments %}
-          <div class="card">
-            <h3>{{ experiment.title | escape }}</h3>
-            <p class="meta">{{ experiment.date | date: "%B %d, %Y" }}</p>
-            <p>{{ experiment.excerpt | strip_html | truncatewords: 30 }}</p>
-            <a href="{{ experiment.url | relative_url }}" class="btn">Read More</a>
+    {% if site.experiments.size > 0 %}
+      {% assign experiments_sorted = site.experiments | sort: 'date' | reverse %}
+      <div class="carousel" aria-label="Latest experiments carousel" id="experiments-carousel">
+        <div class="carousel-track" id="experiments-track">
+        {% for experiment in experiments_sorted limit:5 %}
+          <div class="carousel-item">
+          {% assign default_img = '/assets/img/image.jpg' %}
+          {% assign base_url = experiment.url | replace: 'index.html', '' | replace: '/index/', '/' | replace: 'index/', '' %}
+          {% assign png_path = base_url | append: 'image.png' %}
+          {% assign jpg_path = base_url | append: 'image.jpg' %}
+          {% assign card_image = png_path %}
+          {% assign labels = experiment.labels | default: experiment.categories %}
+          <article class="card post-card">
+            <a class="card-link" href="{{ experiment.url | relative_url }}" aria-label="Open {{ experiment.title | escape }}"></a>
+            <div class="card-image">
+              <img src="{{ card_image | relative_url }}" alt="{{ experiment.title | escape }}" onerror="this.onerror=() => { this.onerror=null; this.src='{{ default_img | relative_url }}'; }; this.src='{{ jpg_path | relative_url }}'" />
+            </div>
+            <div class="card-body">
+              <h3 class="card-title">{{ experiment.title | upcase }}</h3>
+              <div class="card-meta">
+                <div class="labels">
+                  {% if labels %}
+                    {% for label in labels %}
+                      <span class="label">{{ label }}</span>
+                    {% endfor %}
+                  {% endif %}
+                </div>
+                <time class="date">{{ experiment.date | date: "%B %d, %Y" }}</time>
+              </div>
+              <p class="card-description">{{ experiment.excerpt | strip_html }}</p>
+              <div class="card-actions">
+                {% assign cta_text = experiment.action | default: 'Learn more' %}
+                <a href="{{ experiment.url | relative_url }}" class="btn btn-outline">{{ cta_text }}</a>
+              </div>
+            </div>
+          </article>
           </div>
         {% endfor %}
-      {% else %}
-        <div class="card coming-soon">
-          <h3>Exciting Experiments Coming Soon</h3>
-          <p>Our innovation team is cooking up some groundbreaking experiments. Stay tuned for cutting-edge fintech.</p>
+        </div>
+        <div class="carousel-dots" id="experiments-dots">
+          {% for experiment in experiments_sorted limit:5 %}
+            <button class="carousel-dot{% if forloop.first %} active{% endif %}" type="button" aria-label="Go to slide {{ forloop.index }}" data-index="{{ forloop.index0 }}"></button>
+          {% endfor %}
+        </div>
+      </div>
+      {% if site.experiments.size > 5 %}
+        <div class="see-all">
+          <a href="{{ '/experiments/' | relative_url }}" class="btn btn-outline">See all experiments</a>
         </div>
       {% endif %}
-    </div>
+    {% else %}
+      <div class="card coming-soon">
+        <h3>Exciting Experiments Coming Soon</h3>
+        <p>Our innovation team is cooking up some groundbreaking experiments. Stay tuned for cutting-edge fintech.</p>
+      </div>
+    {% endif %}
   </section>
 
   <section id="about">
     <h2>About Bitpanda Labs</h2>
-    <p>Combining experimentation, user feedback, and fast prototyping to shape the future of digital finance.</p>
+    <p>Bitpanda's innovation playground where bold ideas, rapid AI experiments, and future-facing tech get the freedom to move fast.</p>
+    <p>We combine experimentation, user feedback, and fast prototyping to shape the next generation of financial technology.</p>
+    <a href="/about" class="btn btn-outline">Learn More About Us</a>
   </section>
 </div> 
+
+<script>
+  (function() {
+    const carousel = document.getElementById('experiments-carousel');
+    const track = document.getElementById('experiments-track');
+    const dotsContainer = document.getElementById('experiments-dots');
+    if (!carousel || !track || !dotsContainer) return;
+    const dots = Array.from(dotsContainer.querySelectorAll('.carousel-dot'));
+    const items = Array.from(track.querySelectorAll('.carousel-item'));
+    const total = items.length;
+    let pages = 1; // will be computed from layout
+    let idx = 0;   // current page index (0..pages-1)
+    let timerId;
+
+    // If 3 items or fewer, do not rotate and hide dots
+    if (total <= 3) {
+      dotsContainer.style.display = 'none';
+      return;
+    }
+
+    function updateDots() {
+      const activeDots = dots.slice(0, pages);
+      dots.forEach((d, i) => {
+        d.style.display = i < pages ? '' : 'none';
+        d.classList.toggle('active', i === idx);
+        d.setAttribute('aria-current', i === idx ? 'true' : 'false');
+      });
+    }
+
+    function getMetrics() {
+      const item = items[0];
+      if (!item) return { visible: 1, pages: 1 };
+      const style = getComputedStyle(track);
+      const gap = parseInt(style.columnGap || style.gap || 0, 10) || 0;
+      const itemWidth = item.getBoundingClientRect().width;
+      const step = itemWidth + gap;
+      const approxVisible = Math.max(1, Math.round((track.clientWidth + gap) / step));
+      const computedPages = Math.max(1, total - approxVisible + 1);
+      return { visible: approxVisible, pages: computedPages };
+    }
+
+    function syncPages() {
+      const m = getMetrics();
+      pages = m.pages;
+      if (idx >= pages) idx = pages - 1;
+      updateDots();
+    }
+
+    function scrollToIndex(newIdx) {
+      syncPages();
+      idx = (newIdx % pages + pages) % pages;
+      const target = items[idx];
+      if (!target) return;
+      const x = target.offsetLeft;
+      track.scrollTo({ left: x, behavior: 'smooth' });
+      updateDots();
+    }
+
+    function startAuto() { stopAuto(); timerId = setInterval(() => scrollToIndex(idx + 1), 5000); }
+    function stopAuto() { if (timerId) { clearInterval(timerId); timerId = null; } }
+
+    // Dots navigation: scroll directly to the chosen slide
+    dots.forEach((dot, targetIdx) => {
+      dot.addEventListener('click', () => {
+        stopAuto();
+        scrollToIndex(targetIdx);
+        startAuto();
+      });
+    });
+
+    carousel.addEventListener('mouseenter', stopAuto);
+    carousel.addEventListener('mouseleave', startAuto);
+
+    syncPages();
+    scrollToIndex(0);
+    startAuto();
+    // Keep alignment after resize
+    window.addEventListener('resize', () => { syncPages(); scrollToIndex(idx); });
+  })();
+</script>

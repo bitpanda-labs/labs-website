@@ -2,9 +2,77 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% if page.layout == 'experiment' %}
+  <title>{{ page.title | escape }} | {{ site.title | escape }}</title>
+  {% else %}
   <title>{{ site.title | escape }}</title>
+  {% endif %}
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
   <link rel="icon" href="{{ '/favicon.svg' | relative_url }}" type="image/svg+xml">
+  
+  {% if page.layout == 'experiment' %}
+    {% comment %} Generate absolute URLs for social sharing {% endcomment %}
+    {% if jekyll.environment == 'production' %}
+      {% assign base_site_url = site.url %}
+    {% else %}
+      {% assign base_site_url = 'http://localhost:4000' %}
+    {% endif %}
+    
+    {% assign base_url = page.url | replace: 'index.html', '' | replace: '/index/', '/' | replace: 'index/', '' %}
+    {% assign default_social_img = '/assets/img/image.jpg' %}
+    {% assign experiment_png = base_url | append: 'image.png' %}
+    {% assign experiment_jpg = base_url | append: 'image.jpg' %}
+    
+    {% comment %} Check if experiment has custom image by looking at file system {% endcomment %}
+    {% assign experiment_dir = page.path | split: '/' %}
+    {% assign experiment_name = experiment_dir[1] %}
+    
+    {% comment %} Use experiment image if available, otherwise default {% endcomment %}
+    {% assign social_image = experiment_png %}
+    {% assign full_social_image = base_site_url | append: social_image %}
+    {% assign full_fallback_image = base_site_url | append: default_social_img %}
+    
+    <!-- Open Graph Meta Tags for Facebook/LinkedIn -->
+    <meta property="og:title" content="{{ page.title | escape }}">
+    <meta property="og:description" content="{{ page.excerpt | strip_html | truncate: 160 | escape }}">
+    <meta property="og:image" content="{{ base_site_url }}{{ experiment_png }}">
+    <meta property="og:image" content="{{ base_site_url }}{{ experiment_jpg }}">
+    <meta property="og:image" content="{{ base_site_url }}{{ default_social_img }}">
+    <meta property="og:image:secure_url" content="{{ base_site_url }}{{ experiment_png }}">
+    <meta property="og:image:secure_url" content="{{ base_site_url }}{{ experiment_jpg }}">
+    <meta property="og:image:secure_url" content="{{ base_site_url }}{{ default_social_img }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="675">
+    <meta property="og:image:alt" content="{{ page.title | escape }}">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:url" content="{{ base_site_url }}{{ page.url }}">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="{{ site.title | escape }}">
+    <meta property="og:locale" content="en_US">
+    <meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}">
+    <meta property="article:author" content="Bitpanda Labs">
+    {% if page.categories %}
+      {% for category in page.categories %}
+    <meta property="article:tag" content="{{ category }}">
+      {% endfor %}
+    {% endif %}
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@bitpanda">
+    <meta name="twitter:creator" content="@bitpanda">
+    <meta name="twitter:title" content="{{ page.title | escape }}">
+    <meta name="twitter:description" content="{{ page.excerpt | strip_html | truncate: 200 | escape }}">
+    <meta name="twitter:image" content="{{ base_site_url }}{{ experiment_png }}">
+    <meta name="twitter:image:alt" content="{{ page.title | escape }}">
+    <meta name="twitter:domain" content="{{ base_site_url | remove: 'http://' | remove: 'https://' }}">
+    
+    <!-- Additional SEO Meta Tags -->
+    <meta name="description" content="{{ page.excerpt | strip_html | escape }}">
+    <meta name="author" content="Bitpanda Labs">
+    <link rel="canonical" href="{{ base_site_url }}{{ page.url }}">
+  {% endif %}
 </head>
 <body>
   <header>
@@ -17,8 +85,16 @@
       </div>
       <div class="nav-links">
         <a href="/" class="nav-link" data-section="">Home</a>
-        <a href="/#experiments" class="nav-link" data-section="experiments">Experiments</a>
-        <a href="/#about" class="nav-link" data-section="about">About</a>
+        {% if page.url == '/' %}
+          <a href="#experiments" class="nav-link" data-section="experiments">Experiments</a>
+        {% else %}
+          <a href="/experiments" class="nav-link" data-section="experiments">Experiments</a>
+        {% endif %}
+        {% if page.url == '/' %}
+          <a href="#about" class="nav-link" data-section="about">About</a>
+        {% else %}
+          <a href="/about" class="nav-link" data-section="about">About</a>
+        {% endif %}
       </div>
     </nav>
   </header>
@@ -39,11 +115,21 @@
     // Handle active state and smooth scrolling for navigation links
     function updateActiveLink() {
       const hash = window.location.hash.slice(1) || '';
+      const pathname = window.location.pathname;
       const links = document.querySelectorAll('.nav-link');
       
       links.forEach(link => {
         const section = link.getAttribute('data-section');
-        if ((hash === '' && section === '') || (hash === section)) {
+        const href = link.getAttribute('href');
+        
+        // Check if we're on a specific page
+        if (pathname === '/about/' && href === '/about') {
+          link.classList.add('active');
+        } else if (pathname.startsWith('/experiments') && href === '/experiments') {
+          link.classList.add('active');
+        } else if (pathname === '/' && href === '/' && hash === '') {
+          link.classList.add('active');
+        } else if (pathname === '/' && hash === section && section !== '') {
           link.classList.add('active');
         } else {
           link.classList.remove('active');
@@ -51,11 +137,12 @@
       });
     }
 
-    // Handle smooth scrolling
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    // Handle smooth scrolling (supports href="#id" and href="/#id")
+    document.querySelectorAll('a[href^="#"], a[href^="/#"]').forEach(anchor => {
       anchor.addEventListener('click', function (e) {
         e.preventDefault();
-        const targetId = this.getAttribute('href').slice(1);
+        const rawHref = this.getAttribute('href');
+        const targetId = rawHref.replace(/^\/#/, '').replace(/^#/, '');
         if (!targetId) return;
         
         const targetElement = document.getElementById(targetId);
@@ -71,10 +158,26 @@
         });
 
         // Update URL without scrolling
-        history.pushState(null, null, this.getAttribute('href'));
+        history.pushState(null, null, '#' + targetId);
         updateActiveLink();
       });
     });
+
+    // Smooth-scroll to top when clicking Home while already on the homepage
+    (function() {
+      const rootPath = '{{ "/" | relative_url }}';
+      const homeLinks = document.querySelectorAll(`a.nav-link[href="${rootPath}"]`);
+      homeLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          if (window.location.pathname === rootPath) {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            history.pushState(null, null, rootPath);
+            updateActiveLink();
+          }
+        });
+      });
+    })();
 
     // Update active link on page load and hash change
     window.addEventListener('load', updateActiveLink);

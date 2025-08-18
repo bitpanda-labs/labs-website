@@ -35,7 +35,7 @@ plugins:
 collections:
   experiments:
     output: true
-    permalink: /experiments/:name/
+    permalink: /experiments/:path/
 
 # Ensure these files are included in the build
 include:
@@ -43,6 +43,7 @@ include:
   - assets/fonts
   - assets/css
   - favicon.svg
+  - _experiments
 
 # Exclude from processing.
 # The following items will not be processed, by default.
