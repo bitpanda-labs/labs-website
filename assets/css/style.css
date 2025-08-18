@@ -705,19 +705,59 @@ section h2 {
   font-weight: 600;
 }
 
+.share-buttons {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
 .share-btn {
-  background: var(--panda-gradient);
-  color: var(--panda-white);
-  border: none;
-  padding: 0.8rem 1.5rem;
-  border-radius: 25px;
-  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--panda-green);
+  color: white;
+  text-decoration: none;
+  border: 2px solid var(--panda-green);
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 0.9rem;
+  position: relative;
+}
+
+.share-btn svg {
+  flex-shrink: 0;
+  color: white;
 }
 
 .share-btn:hover {
+  background: white;
+  color: var(--panda-green);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
+}
+
+.share-btn:hover svg {
+  color: var(--panda-green);
+}
+
+/* Remove individual platform colors since we're using uniform green */
+.share-twitter,
+.share-facebook,
+.share-linkedin {
+  background: var(--panda-green);
+  color: white;
+  border-color: var(--panda-green);
+}
+
+.share-twitter:hover,
+.share-facebook:hover,
+.share-linkedin:hover {
+  background: white;
+  color: var(--panda-green);
   transform: translateY(-2px);
   box-shadow: var(--shadow-medium);
 }
@@ -873,6 +913,16 @@ footer a:hover {
     text-align: center;
   }
   
+  .share-buttons {
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  
+  .share-btn {
+    width: 40px;
+    height: 40px;
+  }
+  
   .experiment-meta {
     flex-direction: column;
     gap: 1rem;
@@ -890,6 +940,21 @@ footer a:hover {
   
   .experiment-footer {
     padding: 1.5rem;
+  }
+  
+  .share-buttons {
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  
+  .share-btn {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .share-btn svg {
+    width: 16px;
+    height: 16px;
   }
 }
 
