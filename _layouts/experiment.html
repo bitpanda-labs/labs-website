@@ -29,21 +29,10 @@ layout: default
       </div>
       <div class="experiment-hero-wrap">
         {% assign default_img = '/assets/img/image.jpg' %}
-        {% assign image_value = page.image %}
-        {% if image_value %}
-          {% if image_value contains '://' %}
-            {% assign hero_image = image_value %}
-          {% elsif image_value contains '/' %}
-            {% assign hero_image = image_value %}
-          {% else %}
-            {% assign hero_image = base_url | append: image_value %}
-          {% endif %}
-        {% else %}
-          {% assign png_path = base_url | append: 'image.png' %}
-          {% assign jpg_path = base_url | append: 'image.jpg' %}
-          {% assign hero_image = png_path %}
-        {% endif %}
-        <img class="experiment-hero-block" src="{{ hero_image | relative_url }}" alt="{{ page.title | escape }}" {% unless image_value %}onerror="this.onerror=() => { this.onerror=null; this.src='{{ default_img | relative_url }}'; }; this.src='{{ jpg_path | relative_url }}'"{% endunless %} />
+        {% assign png_path = base_url | append: 'image.png' %}
+        {% assign jpg_path = base_url | append: 'image.jpg' %}
+        {% assign hero_image = png_path %}
+        <img class="experiment-hero-block" src="{{ hero_image | relative_url }}" alt="{{ page.title | escape }}" onerror="this.onerror=() => { this.onerror=null; this.src='{{ default_img | relative_url }}'; }; this.src='{{ jpg_path | relative_url }}'" />
       </div>
       <div class="experiment-excerpt">
         {{ page.excerpt | default: "Discover how we're pushing the boundaries of financial technology." }}

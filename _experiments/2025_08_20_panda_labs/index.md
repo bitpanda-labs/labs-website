@@ -1,15 +1,20 @@
 ---
 layout: experiment
-title: "Introducing Bitpanda Labs"
-date: 2025-08-20
-categories: ["Technology", "Company Culture"]
-excerpt: "Bitpanda Labs is our new innovation playground—where bold ideas, rapid AI experiments, and future-facing tech get the freedom to move fast and break things."
-image: image.png
+title: "How AI is Revolutionizing Our Incident Response"
+date: 2025-08-11
+categories: ["Slack Bot", "Internal Tool"]
+excerpt: "When something goes wrong with a service you rely on, you want it fixed fast. But what happens after the fix?"
+
+action: "Try out"
 ---
 
-## The Challenge/Idea
+## Why Postmortems Matter
 
-Describe the problem you're trying to solve or the idea you want to explore. What motivated this experiment?
+Postmortems are structured reviews after an incident (like a service outage or bug in production). The idea is simple: 
+analyse what happened, understand why, and define clear steps to prevent it in the future.
+
+At Bitpanda these are mandatory to make sure we're always improving. They're not about pointing fingers, they’re about 
+understanding what went wrong and how to prevent it from happening again.
 
 ## The Approach/Experiment
 
