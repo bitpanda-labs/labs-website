@@ -93,7 +93,7 @@
         {% if page.url == '/' %}
           <a href="#about" class="nav-link" data-section="about">About</a>
         {% else %}
-          <a href="/#about" class="nav-link" data-section="about">About</a>
+          <a href="/about" class="nav-link" data-section="about">About</a>
         {% endif %}
       </div>
     </nav>
@@ -115,11 +115,21 @@
     // Handle active state and smooth scrolling for navigation links
     function updateActiveLink() {
       const hash = window.location.hash.slice(1) || '';
+      const pathname = window.location.pathname;
       const links = document.querySelectorAll('.nav-link');
       
       links.forEach(link => {
         const section = link.getAttribute('data-section');
-        if ((hash === '' && section === '') || (hash === section)) {
+        const href = link.getAttribute('href');
+        
+        // Check if we're on a specific page
+        if (pathname === '/about/' && href === '/about') {
+          link.classList.add('active');
+        } else if (pathname.startsWith('/experiments') && href === '/experiments') {
+          link.classList.add('active');
+        } else if (pathname === '/' && href === '/' && hash === '') {
+          link.classList.add('active');
+        } else if (pathname === '/' && hash === section && section !== '') {
           link.classList.add('active');
         } else {
           link.classList.remove('active');

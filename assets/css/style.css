@@ -694,6 +694,26 @@ section h2 {
   transform: translateY(-2px);
 }
 
+.btn-primary {
+  background: var(--panda-green);
+  color: var(--panda-white);
+  border: 2px solid var(--panda-green);
+  text-decoration: none;
+  display: inline-block;
+  padding: 1rem 2.5rem;
+  border-radius: 100px;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: transparent;
+  color: var(--panda-green);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
+}
+
 .experiment-share {
   text-align: right;
 }
@@ -762,7 +782,7 @@ section h2 {
   box-shadow: var(--shadow-medium);
 }
 
-/* About Section */
+/* About Section - Homepage */
 #about {
   background: #f4f4f4;
   padding: 4rem 0;
@@ -781,13 +801,133 @@ section h2 {
 #about p {
   font-family: Inter;
   font-size: 12pt !important;
-  line-height: 1.2;
+  line-height: 1.4;
   letter-spacing: normal !important;
   text-transform: none;
   max-width: 1000px;
-  margin: 0 auto;
+  margin: 0 auto 1.5rem auto;
   color: #000000;
   padding: 0 2rem;
+}
+
+#about .btn {
+  margin-top: 1rem;
+}
+
+/* About Page - Dedicated */
+.about-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 6rem 2rem 4rem 2rem;
+}
+
+.about-hero {
+  text-align: center;
+  margin-bottom: 4rem;
+  padding-top: 2rem;
+}
+
+.about-title {
+  font-family: 'Bitpanda Compressed', sans-serif;
+  font-size: clamp(48px, 8vw, 72px);
+  font-weight: 700;
+  color: var(--panda-green);
+  line-height: 0.9;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+}
+
+.about-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(1.1rem, 3vw, 1.4rem);
+  font-weight: 600;
+  color: var(--panda-grey-dark);
+  line-height: 1.4;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.about-content {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.about-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.about-page .about-section h2 {
+  font-family: 'Inter', sans-serif;
+  font-size: 36px;
+  margin-bottom: 2rem;
+  margin-top: 1.5rem;
+  color: #00392c;
+  font-weight: 700;
+  line-height: 0.9;
+  position: relative;
+  text-align: center;
+  text-transform: none;
+}
+
+.about-section p {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: var(--panda-black);
+  margin-bottom: 0;
+}
+
+.approach-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.approach-card {
+  background: var(--panda-grey);
+  padding: 2rem;
+  border-radius: 16px;
+  border-left: 4px solid var(--panda-green);
+}
+
+.approach-card h3 {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--panda-green);
+  margin-bottom: 1rem;
+  line-height: 1.3;
+}
+
+.approach-card p {
+  font-size: 1rem;
+  color: var(--panda-grey-dark);
+  margin: 0;
+}
+
+blockquote {
+  border-left: 4px solid var(--panda-green);
+  padding: 1.5rem;
+  margin: 2rem 0;
+  background: var(--panda-grey);
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.25rem;
+  font-style: italic;
+  color: var(--panda-green);
+  line-height: 1.5;
+}
+
+.about-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 /* Footer */
@@ -927,6 +1067,28 @@ footer a:hover {
     flex-direction: column;
     gap: 1rem;
   }
+  
+  .about-page {
+    padding: 5rem 1rem 2rem 1rem;
+  }
+  
+  .about-hero {
+    margin-bottom: 3rem;
+  }
+  
+  .approach-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .approach-card {
+    padding: 1.5rem;
+  }
+  
+  .about-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }
 
 @media (max-width: 480px) {
@@ -955,6 +1117,22 @@ footer a:hover {
   .share-btn svg {
     width: 16px;
     height: 16px;
+  }
+  
+  .about-page {
+    padding: 4rem 1.5rem 1.5rem 1.5rem;
+  }
+  
+  .about-content {
+    gap: 2rem;
+  }
+  
+  .about-page .about-section h2 {
+    font-size: 28px;
+  }
+  
+  .about-section p {
+    font-size: 1rem;
   }
 }
 
