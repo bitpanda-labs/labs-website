@@ -85,8 +85,16 @@
       </div>
       <div class="nav-links">
         <a href="/" class="nav-link" data-section="">Home</a>
-        <a href="/#experiments" class="nav-link" data-section="experiments">Experiments</a>
-        <a href="/#about" class="nav-link" data-section="about">About</a>
+        {% if page.url == '/' %}
+          <a href="#experiments" class="nav-link" data-section="experiments">Experiments</a>
+        {% else %}
+          <a href="/experiments" class="nav-link" data-section="experiments">Experiments</a>
+        {% endif %}
+        {% if page.url == '/' %}
+          <a href="#about" class="nav-link" data-section="about">About</a>
+        {% else %}
+          <a href="/#about" class="nav-link" data-section="about">About</a>
+        {% endif %}
       </div>
     </nav>
   </header>
