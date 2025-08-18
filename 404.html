@@ -4,22 +4,113 @@ layout: default
 ---
 
 <style type="text/css" media="screen">
-  .container {
-    margin: 10px auto;
-    max-width: 600px;
-    text-align: center;
+  /* Ensure main takes full height minus header/footer */
+  main {
+    min-height: calc(100vh - 140px); /* Approximate header + footer height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 120px; /* Account for fixed header */
+    padding-bottom: 2rem;
   }
-  h1 {
-    margin: 30px 0;
-    font-size: 4em;
-    line-height: 1;
-    letter-spacing: -1px;
+  
+  .error-container {
+    text-align: center;
+    max-width: 600px;
+    padding: 2rem;
+  }
+  
+  .error-code {
+    font-family: 'Bitpanda Compressed', sans-serif;
+    font-size: clamp(80px, 15vw, 120px);
+    font-weight: 700;
+    color: var(--panda-green);
+    line-height: 0.8;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+  }
+  
+  .error-title {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 700;
+    color: var(--panda-black);
+    margin-bottom: 1rem;
+  }
+  
+  .error-description {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.1rem;
+    color: var(--panda-grey-dark);
+    margin-bottom: 2rem;
+    line-height: 1.5;
+  }
+  
+  .error-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .btn-404 {
+    display: inline-block;
+    padding: 0.8rem 2rem;
+    background: var(--panda-green);
+    color: var(--panda-white);
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    border: 2px solid var(--panda-green);
+  }
+  
+  .btn-404:hover {
+    background: transparent;
+    color: var(--panda-green);
+    transform: translateY(-2px);
+  }
+  
+  .btn-outline-404 {
+    display: inline-block;
+    padding: 0.8rem 2rem;
+    background: transparent;
+    color: var(--panda-green);
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    border: 2px solid var(--panda-green);
+  }
+  
+  .btn-outline-404:hover {
+    background: var(--panda-green);
+    color: var(--panda-white);
+    transform: translateY(-2px);
+  }
+  
+  /* Ensure footer stays at bottom */
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  footer {
+    margin-top: auto;
   }
 </style>
 
-<div class="container">
-  <h1>404</h1>
-
-  <p><strong>Page not found :(</strong></p>
-  <p>The requested page could not be found.</p>
+<div class="error-container">
+  <div class="error-code">404</div>
+  <h1 class="error-title">Page not found</h1>
+  <p class="error-description">
+    Sorry, we couldn't find the page you're looking for. It might have been moved, deleted, or you entered the wrong URL.
+  </p>
+  <div class="error-actions">
+    <a href="/" class="btn-404">Go Home</a>
+    <a href="/#experiments" class="btn-outline-404">View Experiments</a>
+  </div>
 </div>
