@@ -11,7 +11,9 @@ layout: default
   </div>
 
   <article class="experiment">
+    {% assign base_url = page.url | replace: 'index.html', '' | replace: '/index/', '/' | replace: 'index/', '' %}
     <header class="experiment-header">
+      <h1 class="experiment-title">{{ page.title | escape }}</h1>
       <div class="experiment-meta">
         <div class="labels">
           {% assign labels = page.labels | default: page.categories %}
@@ -25,7 +27,24 @@ layout: default
         </div>
         <time class="experiment-date">{{ page.date | date: "%B %d, %Y" }}</time>
       </div>
-      <h1 class="experiment-title">{{ page.title | escape }}</h1>
+      <div class="experiment-hero-wrap">
+        {% assign default_img = '/assets/img/image.jpg' %}
+        {% assign image_value = page.image %}
+        {% if image_value %}
+          {% if image_value contains '://' %}
+            {% assign hero_image = image_value %}
+          {% elsif image_value contains '/' %}
+            {% assign hero_image = image_value %}
+          {% else %}
+            {% assign hero_image = base_url | append: image_value %}
+          {% endif %}
+        {% else %}
+          {% assign png_path = base_url | append: 'image.png' %}
+          {% assign jpg_path = base_url | append: 'image.jpg' %}
+          {% assign hero_image = png_path %}
+        {% endif %}
+        <img class="experiment-hero-block" src="{{ hero_image | relative_url }}" alt="{{ page.title | escape }}" {% unless image_value %}onerror="this.onerror=() => { this.onerror=null; this.src='{{ default_img | relative_url }}'; }; this.src='{{ jpg_path | relative_url }}'"{% endunless %} />
+      </div>
       <div class="experiment-excerpt">
         {{ page.excerpt | default: "Discover how we're pushing the boundaries of financial technology." }}
       </div>
