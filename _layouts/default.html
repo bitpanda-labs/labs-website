@@ -74,7 +74,7 @@
     <link rel="canonical" href="{{ base_site_url }}{{ page.url }}">
   {% endif %}
 </head>
-<body>
+<body{% if page.layout == 'experiment' %} class="experiment-layout"{% endif %}>
   <header>
     <nav class="nav-container">
       <div class="nav-brand">
@@ -93,7 +93,7 @@
         {% if page.url == '/' %}
           <a href="#about" class="nav-link" data-section="about">About</a>
         {% else %}
-          <a href="/about" class="nav-link" data-section="about">About</a>
+          <a href="/experiments/2025_09_23_bitpanda_labs/index/" class="nav-link" data-section="about">About</a>
         {% endif %}
       </div>
     </nav>
@@ -112,6 +112,24 @@
     </ul>
   </footer>
   <script>
+    // Handle image loading errors silently
+    function handleImageError(img, fallbackPath, defaultPath) {
+      // Remove error handler to avoid infinite loops
+      img.onerror = null;
+      
+      // If current src contains .jpg, try PNG
+      if (img.src.includes('.jpg')) {
+        img.onerror = function() {
+          img.onerror = null;
+          img.src = defaultPath;
+        };
+        img.src = fallbackPath;
+      } else {
+        // Already tried PNG or other format, use default
+        img.src = defaultPath;
+      }
+    }
+
     // Handle active state and smooth scrolling for navigation links
     function updateActiveLink() {
       const hash = window.location.hash.slice(1) || '';
@@ -123,9 +141,9 @@
         const href = link.getAttribute('href');
         
         // Check if we're on a specific page
-        if (pathname === '/about/' && href === '/about') {
+        if (pathname === '/experiments/2025_09_23_bitpanda_labs/index/' && href === '/experiments/2025_09_23_bitpanda_labs/index/') {
           link.classList.add('active');
-        } else if (pathname.startsWith('/experiments') && href === '/experiments') {
+        } else if (pathname.startsWith('/experiments') && href === '/experiments' && pathname !== '/experiments/2025_09_23_bitpanda_labs/index/') {
           link.classList.add('active');
         } else if (pathname === '/' && href === '/' && hash === '') {
           link.classList.add('active');
