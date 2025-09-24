@@ -23,7 +23,7 @@
   --panda-grey-dark: #6c757d;
   --panda-gradient: linear-gradient(180deg, rgb(16, 62, 54) 0%, rgb(0, 0, 0) 100%);
   --shadow-light: 0 2px 20px rgba(0, 0, 0, 0.08);
-  --shadow-medium: 0 8px 40px rgba(0, 0, 0, 0.12);
+  --shadow-medium: 0 12px 48px rgba(0, 0, 0, 0.15);
   --shadow-heavy: 0 16px 60px rgba(0, 0, 0, 0.15);
 }
 
@@ -217,6 +217,7 @@ section {
 section h2 { 
   font-family: 'Bitpanda Compressed', sans-serif;
   font-size: clamp(24pt, 8vw, 48pt); /* At least 2x body copy (12pt) */
+  margin-top: 3rem;
   margin-bottom: 3rem; 
   text-align: center; 
   font-weight: 700;
@@ -274,7 +275,6 @@ section h2 {
   transition: transform 0.25s ease, box-shadow 0.25s ease;
   border: 1px solid rgba(0, 0, 0, 0.06);
   position: relative;
-  overflow: hidden;
 }
 
 .card::before { display: none; }
@@ -293,6 +293,7 @@ section h2 {
   line-height: 0.9;
   text-transform: uppercase;
 }
+
 
 .card .meta { 
   font-size: 0.9rem; 
@@ -354,8 +355,9 @@ section h2 {
 
 .post-card .card-body {
   display: grid;
-  grid-template-rows: 80px 52px 1fr 56px; /* title, meta, description, button */
-  gap: 0.75rem;
+  /* Reserve room for exactly 2 lines of header while keeping constant card height */
+  grid-template-rows: 70px 52px 1fr 56px; /* title (exactly 2 lines), meta, description, button */
+  gap: 0.4rem;
   min-height: 1px;
   flex: 1 1 auto; /* fill remaining height so buttons align */
 }
@@ -363,12 +365,22 @@ section h2 {
 /* Card title styling to match design reference */
 .post-card .card-title {
   font-family: 'Bitpanda Compressed', sans-serif;
-  font-size: 36px;
+  font-size: 32px;
   color: var(--panda-green);
   font-weight: 700;
-  line-height: 0.9;
+  line-height: 1.1; /* increased for better truncation calculation */
   text-transform: uppercase;
   margin: 0; /* reduce extra gap below title */
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* limit to 2 lines max */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis; /* show ellipsis when clamped */
+  /* Modern CSS line-clamp for better browser support */
+  line-clamp: 2;
+  /* Ensure the container properly clips content */
+  max-height: 70px; /* matches the grid row height */
+  word-wrap: break-word;
 }
 
 .post-card .card-meta {
@@ -382,16 +394,23 @@ section h2 {
 .labels { 
   display: flex; 
   flex-wrap: nowrap; 
-  gap: 0.5rem; 
-  overflow: hidden;
+  gap: 0.4rem; 
+  align-items: center;
+  margin-bottom: 0.25rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  min-height: 24px;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+  padding-bottom: 2px; /* Space for subtle scroll indicator */
 }
 
-.post-card .card-title {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+.labels::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for Chrome/Safari */
 }
+
+/* Removed fade effect - cleaner appearance */
+
 
 .post-card .card-description {
   color: var(--panda-green);
@@ -405,6 +424,12 @@ section h2 {
   -webkit-line-clamp: 6; /* keep height consistent */
   -webkit-box-orient: vertical;
   overflow: hidden;
+  text-overflow: ellipsis;
+  /* Modern CSS line-clamp for better browser support */
+  line-clamp: 6;
+  /* Ensure proper height calculation and clipping */
+  max-height: calc(1.4em * 6); /* 6 lines * line-height */
+  word-wrap: break-word;
 }
 
 .post-card .card-actions { align-self: end; height: 56px; display: flex; align-items: center; }
@@ -412,13 +437,32 @@ section h2 {
 .label {
   background: rgba(16, 62, 54, 0.08);
   color: var(--panda-green);
-  padding: 0.25rem 0.6rem;
+  padding: 0.3rem 0.75rem;
   border-radius: 999px;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 600;
   display: inline-flex;
   align-items: center;
-  line-height: 1; /* ensure vertical centering */
+  line-height: 1.2;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  cursor: default;
+}
+
+/* Clean hover effect without weird cursors */
+.label:hover {
+  background: rgba(16, 62, 54, 0.12);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(16, 62, 54, 0.1);
+}
+
+/* Responsive label sizing */
+@media (max-width: 768px) {
+  .label {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.6rem;
+  }
 }
 
 .date {
@@ -608,9 +652,21 @@ section h2 {
   padding: 3rem;
 }
 
+  .experiment-content h1 { 
+    font-family: 'Inter', sans-serif;
+    font-size: 40px;
+    margin-bottom: 2rem;
+    margin-top: 1.5rem;
+    color: #00392c;
+    font-weight: 900;
+    line-height: 0.9;
+    position: relative;
+    padding-bottom: 0.5rem;
+  }
+
   .experiment-content h2 { 
     font-family: 'Inter', sans-serif;
-    font-size: 36px;
+    font-size: 32px;
     margin-bottom: 2rem;
     margin-top: 1.5rem;
     color: #00392c;
@@ -669,7 +725,6 @@ section h2 {
 }
 
 .experiment-footer {
-  background: var(--panda-grey);
   padding: 3rem;
   display: flex;
   justify-content: space-between;
