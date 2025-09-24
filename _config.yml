@@ -32,6 +32,9 @@ url: "https://labs.bitpanda.com"
 plugins:
   - jekyll-feed
 
+# Hide future-dated posts until their date arrives
+future: false
+
 collections:
   experiments:
     output: true
