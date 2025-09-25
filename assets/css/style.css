@@ -990,9 +990,25 @@ footer a:hover {
 /* Responsive Design */
 @media (max-width: 768px) {
   .hero { 
-    padding: 4rem 1rem;
+    padding: 4rem 0;
     padding-top: calc(4rem + 90px);
-    border-radius: 30px;
+    border-radius: 0;
+    margin-left: -2rem;
+    margin-right: -2rem;
+    width: calc(100% + 4rem);
+  }
+  
+  .hero h1 {
+    font-size: 90px !important;
+    padding: 0 1rem;
+  }
+  
+  .hero p {
+    padding: 0 1rem;
+  }
+  
+  .hero .btn {
+    margin: 0 1rem;
   }
   
   .cards { grid-template-columns: 1fr; gap: 1.5rem; }
