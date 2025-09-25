@@ -16,7 +16,7 @@ permalink: /experiments/
           {% assign base_url = experiment.url | replace: 'index.html', '' | replace: '/index/', '/' | replace: 'index/', '' %}
           {% assign png_path = base_url | append: 'image.png' %}
           {% assign jpg_path = base_url | append: 'image.jpg' %}
-          
+
           {% comment %} Default to JPG, fall back to PNG, then default {% endcomment %}
           {% assign card_image = jpg_path %}
           {% assign labels = experiment.labels | default: experiment.categories %}
