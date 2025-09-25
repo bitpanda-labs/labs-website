@@ -1091,6 +1091,11 @@ footer a:hover {
     margin-top: 0;
   }
   
+  /* Fix header overlap on content pages - minimal spacing like homepage */
+  .content-container section {
+    padding-top: calc(1rem + 90px);
+  }
+  
   .cards { grid-template-columns: 1fr; gap: 1.5rem; }
   
   /* Carousel mobile improvements */
@@ -1200,6 +1205,11 @@ footer a:hover {
   #experiments {
     padding-top: 0;
     margin-top: 0;
+  }
+  
+  /* Fix header overlap on content pages - minimal spacing like homepage */
+  .content-container section {
+    padding-top: calc(0.5rem + 90px);
   }
 }
 
