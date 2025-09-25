@@ -1075,6 +1075,22 @@ footer a:hover {
     justify-content: center;
   }
   
+  /* Reduce excessive spacing on mobile */
+  section {
+    padding: 2.5rem 0;
+  }
+  
+  section h2 {
+    margin-top: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+  
+  /* Make experiments section spacing match about section */
+  #experiments {
+    padding-top: 0;
+    margin-top: 0;
+  }
+  
   .cards { grid-template-columns: 1fr; gap: 1.5rem; }
   
   /* Carousel mobile improvements */
@@ -1171,7 +1187,19 @@ footer a:hover {
   }
   
   section {
-    margin: 3rem 0;
+    padding: 2rem 0;
+    margin: 0;
+  }
+  
+  section h2 {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  /* Make experiments section spacing match about section */
+  #experiments {
+    padding-top: 0;
+    margin-top: 0;
   }
 }
 
