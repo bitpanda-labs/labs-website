@@ -42,7 +42,7 @@ body {
   background-color: var(--panda-white);
   font-size: 12pt;
   font-weight: 400;
-  padding-top: 0;
+  padding-top: 90px;
   margin: 0;
   min-height: 100vh;
   overflow-x: hidden;
@@ -148,6 +148,8 @@ main {
   padding: 6rem 2rem; 
   background: linear-gradient(90deg, rgb(16, 62, 54) 0%, rgb(0, 0, 0) 100%);
   margin-bottom: 4rem;
+  margin-top: -90px;
+  padding-top: calc(6rem + 90px);
   width: 100%;
   min-height: 100vh;
   display: flex;
@@ -899,18 +901,17 @@ section h2 {
 .about-page {
   max-width: 900px;
   margin: 0 auto;
-  padding: 6rem 2rem 4rem 2rem;
+  padding: 5rem 0;
 }
 
 .about-hero {
   text-align: center;
   margin-bottom: 4rem;
-  padding-top: 2rem;
 }
 
 .about-title {
   font-family: 'Bitpanda Compressed', sans-serif;
-  font-size: clamp(48px, 8vw, 72px);
+  font-size: clamp(48px, 8vw, 48pt);
   font-weight: 700;
   color: var(--panda-green);
   line-height: 0.9;
@@ -1045,6 +1046,7 @@ footer a:hover {
 @media (max-width: 768px) {
   .hero { 
     padding: 4rem 1rem;
+    padding-top: calc(4rem + 90px);
     border-radius: 30px;
   }
   
@@ -1099,6 +1101,7 @@ footer a:hover {
 @media (max-width: 480px) {
   .hero {
     padding: 3rem 1rem;
+    padding-top: calc(3rem + 90px);
   }
   
   .card {
@@ -1150,7 +1153,7 @@ footer a:hover {
   }
   
   .about-page {
-    padding: 5rem 1rem 2rem 1rem;
+    padding: 2rem 1rem 2rem 1rem;
   }
   
   .about-hero {
@@ -1201,7 +1204,7 @@ footer a:hover {
   }
   
   .about-page {
-    padding: 4rem 1.5rem 1.5rem 1.5rem;
+    padding: 2rem 1.5rem 1.5rem 1.5rem;
   }
   
   .about-content {
