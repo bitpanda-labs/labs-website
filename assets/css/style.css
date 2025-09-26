@@ -551,6 +551,10 @@ section h2 {
 .breadcrumb-current {
   color: var(--panda-black);
   font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300px;
 }
 
 .experiment {
@@ -1316,6 +1320,11 @@ footer a:hover {
     padding: calc(2rem + 90px) 1rem 2rem 1rem;
   }
   
+  /* Smaller breadcrumb truncation on mobile */
+  .breadcrumb-current {
+    max-width: 200px;
+  }
+  
   .about-hero {
     margin-bottom: 3rem;
   }
@@ -1365,6 +1374,11 @@ footer a:hover {
   
   .about-page {
     padding: calc(2rem + 90px) 1.5rem 1.5rem 1.5rem;
+  }
+  
+  /* Even smaller breadcrumb truncation on small mobile */
+  .breadcrumb-current {
+    max-width: 150px;
   }
   
   .about-content {
