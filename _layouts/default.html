@@ -77,8 +77,15 @@
   <!-- Facebook-specific properties -->
   <meta property="fb:app_id" content="">
   
-  <!-- LinkedIn-specific -->
+  <!-- LinkedIn-specific optimizations -->
   <meta property="og:see_also" content="{{ base_site_url }}">
+  <meta property="linkedin:owner" content="bitpanda">
+  
+  <!-- Pinterest-specific (though it uses Open Graph) -->
+  <meta property="og:rich_attachment" content="true">
+  
+  <!-- Instagram-specific (uses Facebook's Open Graph) -->
+  <meta property="instagram:media_type" content="image">
   {% if page.date %}
     <meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}">
     <meta property="article:author" content="Bitpanda Labs">
@@ -95,9 +102,23 @@
   <meta name="twitter:creator" content="@bitpanda">
   <meta name="twitter:title" content="{{ page_title | escape }}">
   <meta name="twitter:description" content="{{ page_description | escape }}">
+  <!-- Primary Twitter image -->
   <meta name="twitter:image" content="{{ page_image }}">
   <meta name="twitter:image:src" content="{{ page_image }}">
+  {% if page.layout == 'experiment' and page_image_alt != page_image %}
+    <!-- Alternative Twitter image format -->
+    <meta name="twitter:image0" content="{{ page_image }}">
+    <meta name="twitter:image1" content="{{ page_image_alt }}">
+    <meta name="twitter:image2" content="{{ fallback_image }}">
+  {% endif %}
   <meta name="twitter:image:alt" content="{{ page_title | escape }}">
+  {% if page.layout == 'experiment' %}
+    <meta name="twitter:image:width" content="1600">
+    <meta name="twitter:image:height" content="900">
+  {% else %}
+    <meta name="twitter:image:width" content="1200">
+    <meta name="twitter:image:height" content="675">
+  {% endif %}
   <meta name="twitter:domain" content="{{ base_site_url | remove: 'http://' | remove: 'https://' }}">
   <meta name="twitter:url" content="{{ base_site_url }}{{ page.url }}">
   
