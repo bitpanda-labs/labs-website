@@ -17,10 +17,15 @@
   {% if page.layout == 'experiment' %}
     {% assign page_title = page.title %}
     {% assign page_description = page.excerpt | strip_html | strip_newlines | truncate: 160 %}
-    {% assign base_url = page.url | replace: 'index.html', '' | replace: '/index/', '/' %}
+    {% comment %} Fix URL path - remove /index/ suffix and ensure single trailing slash {% endcomment %}
+    {% assign base_url = page.url | remove: '/index/' | remove: 'index.html' %}
+    {% if base_url == '' %}{% assign base_url = '/' %}{% endif %}
+    {% unless base_url contains '/experiments/' %}
+      {% assign base_url = '/experiments' | append: base_url %}
+    {% endunless %}
     {% comment %} Build image paths for experiment {% endcomment %}
-    {% assign experiment_png = base_url | append: 'image.png' %}
-    {% assign experiment_jpg = base_url | append: 'image.jpg' %}
+    {% assign experiment_jpg = base_url | append: '/image.jpg' %}
+    {% assign experiment_png = base_url | append: '/image.png' %}
     {% comment %} For social sharing, try JPG first since most experiments use JPG {% endcomment %}
     {% assign page_image = base_site_url | append: experiment_jpg %}
     {% assign page_image_alt = base_site_url | append: experiment_png %}
@@ -50,8 +55,13 @@
     <meta property="og:image" content="{{ fallback_image }}">
     <meta property="og:image:secure_url" content="{{ fallback_image }}">
   {% endif %}
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="675">
+  {% if page.layout == 'experiment' %}
+    <meta property="og:image:width" content="1600">
+    <meta property="og:image:height" content="900">
+  {% else %}
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="675">
+  {% endif %}
   <meta property="og:image:alt" content="{{ page_title | escape }}">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:type" content="image/jpeg">
