@@ -95,9 +95,23 @@
   <meta name="twitter:creator" content="@bitpanda">
   <meta name="twitter:title" content="{{ page_title | escape }}">
   <meta name="twitter:description" content="{{ page_description | escape }}">
+  <!-- Primary Twitter image -->
   <meta name="twitter:image" content="{{ page_image }}">
   <meta name="twitter:image:src" content="{{ page_image }}">
+  {% if page.layout == 'experiment' and page_image_alt != page_image %}
+    <!-- Alternative Twitter image format -->
+    <meta name="twitter:image0" content="{{ page_image }}">
+    <meta name="twitter:image1" content="{{ page_image_alt }}">
+    <meta name="twitter:image2" content="{{ fallback_image }}">
+  {% endif %}
   <meta name="twitter:image:alt" content="{{ page_title | escape }}">
+  {% if page.layout == 'experiment' %}
+    <meta name="twitter:image:width" content="1600">
+    <meta name="twitter:image:height" content="900">
+  {% else %}
+    <meta name="twitter:image:width" content="1200">
+    <meta name="twitter:image:height" content="675">
+  {% endif %}
   <meta name="twitter:domain" content="{{ base_site_url | remove: 'http://' | remove: 'https://' }}">
   <meta name="twitter:url" content="{{ base_site_url }}{{ page.url }}">
   
