@@ -77,8 +77,15 @@
   <!-- Facebook-specific properties -->
   <meta property="fb:app_id" content="">
   
-  <!-- LinkedIn-specific -->
+  <!-- LinkedIn-specific optimizations -->
   <meta property="og:see_also" content="{{ base_site_url }}">
+  <meta property="linkedin:owner" content="bitpanda">
+  
+  <!-- Pinterest-specific (though it uses Open Graph) -->
+  <meta property="og:rich_attachment" content="true">
+  
+  <!-- Instagram-specific (uses Facebook's Open Graph) -->
+  <meta property="instagram:media_type" content="image">
   {% if page.date %}
     <meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}">
     <meta property="article:author" content="Bitpanda Labs">
