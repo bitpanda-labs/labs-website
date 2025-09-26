@@ -33,7 +33,7 @@
     {% assign page_image = base_site_url | append: '/assets/img/social-image.jpg' %}
   {% endif %}
   
-  <!-- Open Graph Meta Tags for Facebook/LinkedIn -->
+  <!-- Open Graph Meta Tags for Facebook, Instagram, LinkedIn, WhatsApp -->
   <meta property="og:title" content="{{ page_title | escape }}">
   <meta property="og:description" content="{{ page_description | escape }}">
   {% if page.layout == 'experiment' %}
@@ -57,6 +57,16 @@
   <meta property="og:type" content="{% if page.layout == 'experiment' %}article{% else %}website{% endif %}">
   <meta property="og:site_name" content="{{ site.title | escape }}">
   <meta property="og:locale" content="en_US">
+  
+  <!-- Additional Open Graph properties for better platform support -->
+  <meta property="og:updated_time" content="{% if page.date %}{{ page.date | date_to_xmlschema }}{% else %}{{ site.time | date_to_xmlschema }}{% endif %}">
+  <meta property="og:determiner" content="the">
+  
+  <!-- Facebook-specific properties -->
+  <meta property="fb:app_id" content="">
+  
+  <!-- LinkedIn-specific -->
+  <meta property="og:see_also" content="{{ base_site_url }}">
   {% if page.date %}
     <meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}">
     <meta property="article:author" content="Bitpanda Labs">
@@ -75,16 +85,64 @@
   <meta name="twitter:description" content="{{ page_description | escape }}">
   {% if page.layout == 'experiment' %}
     <meta name="twitter:image" content="{{ base_site_url }}{{ experiment_png }}">
+    <meta name="twitter:image:src" content="{{ base_site_url }}{{ experiment_png }}">
   {% else %}
     <meta name="twitter:image" content="{{ page_image }}">
+    <meta name="twitter:image:src" content="{{ page_image }}">
   {% endif %}
   <meta name="twitter:image:alt" content="{{ page_title | escape }}">
   <meta name="twitter:domain" content="{{ base_site_url | remove: 'http://' | remove: 'https://' }}">
+  <meta name="twitter:url" content="{{ base_site_url }}{{ page.url }}">
+  
+  <!-- Additional Twitter properties -->
+  <meta name="twitter:label1" content="Reading time">
+  <meta name="twitter:data1" content="{% if page.layout == 'experiment' %}5 min read{% else %}2 min read{% endif %}">
+  <meta name="twitter:label2" content="Category">
+  <meta name="twitter:data2" content="{% if page.layout == 'experiment' %}Fintech Innovation{% else %}Innovation Lab{% endif %}">
   
   <!-- Additional SEO Meta Tags -->
   <meta name="description" content="{{ page_description | escape }}">
   <meta name="author" content="Bitpanda Labs">
+  <meta name="publisher" content="Bitpanda Labs">
+  <meta name="robots" content="index, follow">
+  <meta name="googlebot" content="index, follow">
   <link rel="canonical" href="{{ base_site_url }}{{ page.url }}">
+  
+  <!-- WhatsApp and Telegram optimization -->
+  <meta property="telegram:channel" content="@bitpanda">
+  
+  <!-- Schema.org structured data for better platform recognition -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "{% if page.layout == 'experiment' %}Article{% else %}WebSite{% endif %}",
+    "name": "{{ page_title | escape | jsonify }}",
+    "headline": "{{ page_title | escape | jsonify }}",
+    "description": "{{ page_description | escape | jsonify }}",
+    "url": "{{ base_site_url }}{{ page.url }}",
+    "image": {
+      "@type": "ImageObject",
+      "url": "{% if page.layout == 'experiment' %}{{ base_site_url }}{{ experiment_png }}{% else %}{{ page_image }}{% endif %}",
+      "width": 1200,
+      "height": 675
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Bitpanda Labs",
+      "url": "{{ base_site_url }}",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "{{ base_site_url }}/assets/Bitpanda_Lettermark_white_RGB.png"
+      }
+    }{% if page.layout == 'experiment' and page.date %},
+    "datePublished": "{{ page.date | date_to_xmlschema }}",
+    "dateModified": "{{ page.date | date_to_xmlschema }}",
+    "author": {
+      "@type": "Organization",
+      "name": "Bitpanda Labs"
+    }{% endif %}
+  }
+  </script>
   
 </head>
 <body>
