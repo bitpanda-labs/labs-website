@@ -10,8 +10,9 @@ layout: default
 <div class="content-container">
   <section id="experiments">
     <h2>Latest Experiments</h2>
-    {% if site.experiments.size > 0 %}
-      {% assign experiments_sorted = site.experiments | sort: 'date' | reverse %}
+    {% assign experiments_filtered = site.experiments | where_exp: "experiment", "experiment.date <= site.time" %}
+    {% assign experiments_sorted = experiments_filtered | sort: 'date' | reverse %}
+    {% if experiments_filtered.size > 0 %}
       <div class="carousel" aria-label="Latest experiments carousel" id="experiments-carousel">
         <div class="carousel-track" id="experiments-track">
         {% for experiment in experiments_sorted limit:5 %}
@@ -20,12 +21,14 @@ layout: default
           {% assign base_url = experiment.url | replace: 'index.html', '' | replace: '/index/', '/' | replace: 'index/', '' %}
           {% assign png_path = base_url | append: 'image.png' %}
           {% assign jpg_path = base_url | append: 'image.jpg' %}
-          {% assign card_image = png_path %}
+          
+          {% comment %} Default to JPG, fall back to PNG, then default {% endcomment %}
+          {% assign card_image = jpg_path %}
           {% assign labels = experiment.labels | default: experiment.categories %}
           <article class="card post-card">
             <a class="card-link" href="{{ experiment.url | relative_url }}" aria-label="Open {{ experiment.title | escape }}"></a>
             <div class="card-image">
-              <img src="{{ card_image | relative_url }}" alt="{{ experiment.title | escape }}" onerror="this.onerror=() => { this.onerror=null; this.src='{{ default_img | relative_url }}'; }; this.src='{{ jpg_path | relative_url }}'" />
+              <img src="{{ card_image | relative_url }}" alt="{{ experiment.title | escape }}" onerror="handleImageError(this, '{{ png_path | relative_url }}', '{{ default_img | relative_url }}')" />
             </div>
             <div class="card-body">
               <h3 class="card-title">{{ experiment.title | upcase }}</h3>
@@ -51,11 +54,11 @@ layout: default
         </div>
         <div class="carousel-dots" id="experiments-dots">
           {% for experiment in experiments_sorted limit:5 %}
-            <button class="carousel-dot{% if forloop.first %} active{% endif %}" type="button" aria-label="Go to slide {{ forloop.index }}" data-index="{{ forloop.index0 }}"></button>
+            <button class="carousel-dot{% if forloop.first %} active{% endif %}" type="button" aria-label="Go to slide {{ forloop.index }}" data-index="{{ forloop.index0 }}" onclick="if(window.innerWidth <= 768) { const track = document.getElementById('experiments-track'); track.scrollLeft = {{ forloop.index0 }} * track.offsetWidth; document.querySelectorAll('.carousel-dot').forEach(d => d.classList.remove('active')); this.classList.add('active'); }"></button>
           {% endfor %}
         </div>
       </div>
-      {% if site.experiments.size > 5 %}
+      {% if experiments_filtered.size > 5 %}
         <div class="see-all">
           <a href="{{ '/experiments/' | relative_url }}" class="btn btn-outline">See all experiments</a>
         </div>
@@ -72,7 +75,7 @@ layout: default
     <h2>About Bitpanda Labs</h2>
     <p>Bitpanda's innovation playground where bold ideas, rapid AI experiments, and future-facing tech get the freedom to move fast.</p>
     <p>We combine experimentation, user feedback, and fast prototyping to shape the next generation of financial technology.</p>
-    <a href="/about" class="btn btn-outline">Learn More About Us</a>
+    <a href="/experiments/2025_09_23_bitpanda_labs/index/" class="btn btn-outline">Learn More About Us</a>
   </section>
 </div> 
 
@@ -89,8 +92,8 @@ layout: default
     let idx = 0;   // current page index (0..pages-1)
     let timerId;
 
-    // If 3 items or fewer, do not rotate and hide dots
-    if (total <= 3) {
+    // If 3 items or fewer, do not rotate and hide dots (DISABLED for mobile)
+    if (total <= 3 && window.innerWidth > 768) {
       dotsContainer.style.display = 'none';
       return;
     }
@@ -153,5 +156,78 @@ layout: default
     startAuto();
     // Keep alignment after resize
     window.addEventListener('resize', () => { syncPages(); scrollToIndex(idx); });
+
+    // Force show dots on mobile and add auto-rotation
+    if (window.innerWidth <= 768) {
+      dotsContainer.style.display = 'flex';
+      
+      // Mobile auto-rotation - reuse the working dot click logic
+      let mobileCurrentIndex = 0;
+      let mobileAutoTimer;
+      
+      function mobileAutoRotate() {
+        mobileCurrentIndex = (mobileCurrentIndex + 1) % 3; // We have 3 cards
+        
+        // Simulate clicking the next dot (reuse working logic)
+        const mobileDots = document.querySelectorAll('.carousel-dot');
+        if (mobileDots[mobileCurrentIndex]) {
+          mobileDots[mobileCurrentIndex].click();
+        }
+      }
+      
+      function startMobileAuto() {
+        if (mobileAutoTimer) clearInterval(mobileAutoTimer);
+        mobileAutoTimer = setInterval(mobileAutoRotate, 5000); // 5 seconds
+      }
+      
+      function stopMobileAuto() {
+        if (mobileAutoTimer) {
+          clearInterval(mobileAutoTimer);
+          mobileAutoTimer = null;
+        }
+      }
+      
+      // Start auto-rotation after a delay
+      setTimeout(startMobileAuto, 2000);
+      
+      // Update dots after touch/swipe ends
+      function updateDotsAfterSwipe() {
+        setTimeout(() => {
+          const scrollLeft = track.scrollLeft;
+          const cardWidth = track.offsetWidth;
+          const currentIndex = Math.round(scrollLeft / cardWidth);
+          
+          // Update active dot
+          const mobileDots = document.querySelectorAll('.carousel-dot');
+          mobileDots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === currentIndex);
+          });
+          
+          // Keep track of current index for auto-rotation
+          mobileCurrentIndex = currentIndex;
+        }, 200); // Wait for scroll to settle
+      }
+
+      // Pause on touch/interaction and update dots
+      track.addEventListener('touchstart', stopMobileAuto);
+      track.addEventListener('touchend', () => {
+        updateDotsAfterSwipe(); // Update dots after swipe
+        setTimeout(startMobileAuto, 3000);
+      });
+    }
+    
+    // Universal fallback - try to add touch event regardless of screen size
+    track.addEventListener('touchend', function() {
+      setTimeout(() => {
+        const scrollLeft = track.scrollLeft;
+        const cardWidth = track.offsetWidth;
+        const currentIndex = Math.round(scrollLeft / cardWidth);
+        
+        const allDots = document.querySelectorAll('.carousel-dot');
+        allDots.forEach((dot, index) => {
+          dot.classList.toggle('active', index === currentIndex);
+        });
+      }, 300);
+    });
   })();
 </script>
