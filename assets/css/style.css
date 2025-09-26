@@ -1167,10 +1167,14 @@ footer a:hover {
   }
   
   .post-card .card-description {
-    font-size: 14px;
-    -webkit-line-clamp: 4;
-    line-clamp: 4;
-    max-height: calc(1.4em * 4);
+    font-size: 16px;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    max-height: calc(1.4em * 3);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
   }
   
   .post-card .card-image { 
@@ -1190,10 +1194,14 @@ footer a:hover {
   }
   
   .post-card .card-description {
-    font-size: 14px;
-    -webkit-line-clamp: 4;
-    line-clamp: 4;
-    max-height: calc(1.4em * 4);
+    font-size: 16px;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    max-height: calc(1.4em * 3);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
   }
 
   .product-card {
@@ -1248,11 +1256,18 @@ footer a:hover {
   }
   
   .post-card .card-title {
-    font-size: 24px;
+    font-size: 26px;
   }
   
   .post-card .card-description {
-    font-size: 13px;
+    font-size: 16px;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    max-height: calc(1.4em * 3);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
   }
   
   section {
