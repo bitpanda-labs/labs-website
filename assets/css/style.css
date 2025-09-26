@@ -1326,6 +1326,31 @@ footer a:hover {
     justify-content: flex-start;
   }
   
+  /* Scale text sizes proportionally to mobile title */
+  .experiment-tag {
+    font-size: 0.9rem;
+  }
+  
+  .experiment-date {
+    font-size: 0.9rem;
+  }
+  
+  .experiment-excerpt {
+    font-size: 16px;
+  }
+  
+  .experiment-content h1 {
+    font-size: 28px;
+  }
+  
+  .experiment-content h2 {
+    font-size: 22px;
+  }
+  
+  .experiment-content h3 {
+    font-size: 17px;
+  }
+  
   .about-page {
     padding: calc(2rem + 90px) 1rem 2rem 1rem;
   }
@@ -1396,6 +1421,31 @@ footer a:hover {
     padding: 0 0.25rem;
     margin: 0 0 2rem 0;
     font-size: 55px;
+  }
+  
+  /* Scale text sizes proportionally to mobile title */
+  .experiment-tag {
+    font-size: 0.9rem;
+  }
+  
+  .experiment-date {
+    font-size: 0.9rem;
+  }
+  
+  .experiment-excerpt {
+    font-size: 16px;
+  }
+  
+  .experiment-content h1 {
+    font-size: 28px;
+  }
+  
+  .experiment-content h2 {
+    font-size: 22px;
+  }
+  
+  .experiment-content h3 {
+    font-size: 17px;
   }
   
   /* Even smaller breadcrumb truncation on small mobile */
