@@ -1098,15 +1098,75 @@ footer a:hover {
   
   .cards { grid-template-columns: 1fr; gap: 1.5rem; }
   
-  /* Carousel mobile improvements */
+  /* Mobile carousel - full width cards with manual scroll positions */
   .carousel-track {
-    grid-auto-columns: 100%; /* Single card per view on mobile */
+    grid-auto-columns: 100%; /* Full width cards */
     gap: 1rem;
+    overflow-x: auto; /* Allow scrolling for carousel functionality */
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none; /* Hide scrollbar */
+    -ms-overflow-style: none; /* IE/Edge */
+  }
+  
+  .carousel-track::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome/Safari */
+  }
+  
+  .carousel-item {
+    scroll-snap-align: start;
+  }
+  
+  /* Ensure dots are visible on mobile - override JS that hides them for <=3 items */
+  #experiments-dots {
+    display: flex !important;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 1.5rem;
+  }
+  
+  .carousel-dots {
+    display: flex !important;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 1.5rem;
+  }
+  
+  .carousel-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(16, 62, 54, 0.25);
+    border: none;
+    cursor: pointer;
+  }
+  
+  .carousel-dot.active {
+    background: var(--panda-green);
+  }
+  
+  /* Mobile carousel script fix */
+  @media (max-width: 768px) {
+    .carousel-track {
+      scroll-behavior: smooth;
+    }
   }
   
   .post-card {
     min-height: 500px;
     max-height: 500px;
+  }
+  
+  .post-card .card-title {
+    font-size: 28px;
+    line-height: 1.0;
+    max-height: none;
+  }
+  
+  .post-card .card-description {
+    font-size: 14px;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+    max-height: calc(1.4em * 4);
   }
   
   .post-card .card-image { 
