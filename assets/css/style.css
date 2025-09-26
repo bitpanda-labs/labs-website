@@ -1280,11 +1280,19 @@ footer a:hover {
 /* Responsive for experiment page */
 @media (max-width: 768px) {
   .experiment-page {
-    padding: 1rem;
+    padding: 1rem 0.5rem;
+    max-width: 100%;
+  }
+  
+  .experiment-title {
+    padding: 0 0.5rem;
+    margin: 0;
+    font-size: 55px;
   }
   
   .experiment-header {
-    padding: 3rem 2rem;
+    padding: 3rem 0.5rem;
+    margin: 0;
   }
   
   .content-wrapper {
@@ -1346,7 +1354,8 @@ footer a:hover {
 
 @media (max-width: 480px) {
   .experiment-header {
-    padding: 2rem 1.5rem;
+    padding: 2rem 0.25rem;
+    margin: 0;
   }
   
   .content-wrapper {
@@ -1374,6 +1383,17 @@ footer a:hover {
   
   .about-page {
     padding: calc(2rem + 90px) 1.5rem 1.5rem 1.5rem;
+  }
+  
+  .experiment-page {
+    padding: 1rem 0.25rem;
+    max-width: 100%;
+  }
+  
+  .experiment-title {
+    padding: 0 0.25rem;
+    margin: 0;
+    font-size: 55px;
   }
   
   /* Even smaller breadcrumb truncation on small mobile */
