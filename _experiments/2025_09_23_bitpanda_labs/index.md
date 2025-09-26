@@ -1,7 +1,7 @@
 ---
 layout: experiment
 title: "Bitpanda Labs - Playground for Experimentation"
-date: 2025-09-24
+date: 2025-09-26
 categories: ["AI & Machine Learning", "Company Culture"]
 excerpt: "Bitpanda Labs is here to spark bold ideas and fast experimentation. A space where we explore the “what ifs” of technology."
 
