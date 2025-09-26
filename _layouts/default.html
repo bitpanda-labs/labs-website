@@ -22,15 +22,15 @@
     {% assign experiment_jpg = base_url | append: 'image.jpg' %}
     {% comment %} Use experiment-specific image, fallback to default social image {% endcomment %}
     {% assign page_image = base_site_url | append: experiment_png %}
-    {% assign fallback_image = base_site_url | append: '/assets/img/social-image.jpg' %}
+    {% assign fallback_image = base_site_url | append: '/assets/img/social-image.png' %}
   {% elsif page.url == '/' %}
     {% assign page_title = "Bitpanda Labs - Exploring the Future of Finance" %}
     {% assign page_description = "Bitpanda's innovation playground for internal innovation, tech experiments, and product prototypes. Discover cutting-edge fintech solutions." %}
-    {% assign page_image = base_site_url | append: '/assets/img/social-image.jpg' %}
+    {% assign page_image = base_site_url | append: '/assets/img/social-image.png' %}
   {% else %}
     {% assign page_title = page.title | default: site.title | append: ' | ' | append: site.title %}
     {% assign page_description = page.description | default: site.description | strip_html | truncate: 160 %}
-    {% assign page_image = base_site_url | append: '/assets/img/social-image.jpg' %}
+    {% assign page_image = base_site_url | append: '/assets/img/social-image.png' %}
   {% endif %}
   
   <!-- Open Graph Meta Tags for Facebook, Instagram, LinkedIn, WhatsApp -->
