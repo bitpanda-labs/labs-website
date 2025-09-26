@@ -2,54 +2,72 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  {% if page.layout == 'experiment' %}
-  <title>{{ page.title | escape }} | {{ site.title | escape }}</title>
-  {% else %}
-  <title>{{ site.title | escape }}</title>
-  {% endif %}
+  <title>{{ page_title | escape }}</title>
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
   <link rel="icon" href="{{ '/favicon.svg' | relative_url }}" type="image/svg+xml">
   
+  {% comment %} Generate absolute URLs for social sharing {% endcomment %}
+  {% if jekyll.environment == 'production' %}
+    {% assign base_site_url = site.url %}
+  {% else %}
+    {% assign base_site_url = 'http://localhost:4000' %}
+  {% endif %}
+  
+  {% comment %} Set page-specific meta content {% endcomment %}
   {% if page.layout == 'experiment' %}
-    {% comment %} Generate absolute URLs for social sharing {% endcomment %}
-    {% if jekyll.environment == 'production' %}
-      {% assign base_site_url = site.url %}
-    {% else %}
-      {% assign base_site_url = 'http://localhost:4000' %}
-    {% endif %}
-    
+    {% assign page_title = page.title %}
+    {% assign page_description = page.excerpt | strip_html | truncate: 160 %}
     {% assign base_url = page.url | replace: 'index.html', '' | replace: '/index/', '/' | replace: 'index/', '' %}
-    {% assign default_social_img = '/assets/img/image.jpg' %}
     {% assign experiment_png = base_url | append: 'image.png' %}
     {% assign experiment_jpg = base_url | append: 'image.jpg' %}
-    
-    {% comment %} Check if experiment has custom image by looking at file system {% endcomment %}
-    {% assign experiment_dir = page.path | split: '/' %}
-    {% assign experiment_name = experiment_dir[1] %}
-    
-    {% comment %} Use experiment image if available, otherwise default {% endcomment %}
-    {% assign social_image = experiment_png %}
-    {% assign full_social_image = base_site_url | append: social_image %}
-    {% assign full_fallback_image = base_site_url | append: default_social_img %}
-    
-    <!-- Open Graph Meta Tags for Facebook/LinkedIn -->
-    <meta property="og:title" content="{{ page.title | escape }}">
-    <meta property="og:description" content="{{ page.excerpt | strip_html | truncate: 160 | escape }}">
+    {% comment %} Use experiment-specific image, fallback to default social image {% endcomment %}
+    {% assign page_image = base_site_url | append: experiment_png %}
+    {% assign fallback_image = base_site_url | append: '/assets/img/social-image.png' %}
+  {% elsif page.url == '/' %}
+    {% assign page_title = "Bitpanda Labs - Exploring the Future of Finance" %}
+    {% assign page_description = "Bitpanda's innovation playground for internal innovation, tech experiments, and product prototypes. Discover cutting-edge fintech solutions." %}
+    {% assign page_image = base_site_url | append: '/assets/img/social-image.png' %}
+  {% else %}
+    {% assign page_title = page.title | default: site.title | append: ' | ' | append: site.title %}
+    {% assign page_description = page.description | default: site.description | strip_html | truncate: 160 %}
+    {% assign page_image = base_site_url | append: '/assets/img/social-image.png' %}
+  {% endif %}
+  
+  <!-- Open Graph Meta Tags for Facebook, Instagram, LinkedIn, WhatsApp -->
+  <meta property="og:title" content="{{ page_title | escape }}">
+  <meta property="og:description" content="{{ page_description | escape }}">
+  {% if page.layout == 'experiment' %}
+    <!-- Try experiment images first, then fallback -->
     <meta property="og:image" content="{{ base_site_url }}{{ experiment_png }}">
     <meta property="og:image" content="{{ base_site_url }}{{ experiment_jpg }}">
-    <meta property="og:image" content="{{ base_site_url }}{{ default_social_img }}">
+    <meta property="og:image" content="{{ fallback_image }}">
     <meta property="og:image:secure_url" content="{{ base_site_url }}{{ experiment_png }}">
     <meta property="og:image:secure_url" content="{{ base_site_url }}{{ experiment_jpg }}">
-    <meta property="og:image:secure_url" content="{{ base_site_url }}{{ default_social_img }}">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="675">
-    <meta property="og:image:alt" content="{{ page.title | escape }}">
-    <meta property="og:image:type" content="image/png">
-    <meta property="og:image:type" content="image/jpeg">
-    <meta property="og:url" content="{{ base_site_url }}{{ page.url }}">
-    <meta property="og:type" content="article">
-    <meta property="og:site_name" content="{{ site.title | escape }}">
-    <meta property="og:locale" content="en_US">
+    <meta property="og:image:secure_url" content="{{ fallback_image }}">
+  {% else %}
+    <meta property="og:image" content="{{ page_image }}">
+    <meta property="og:image:secure_url" content="{{ page_image }}">
+  {% endif %}
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="675">
+  <meta property="og:image:alt" content="{{ page_title | escape }}">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:url" content="{{ base_site_url }}{{ page.url }}">
+  <meta property="og:type" content="{% if page.layout == 'experiment' %}article{% else %}website{% endif %}">
+  <meta property="og:site_name" content="{{ site.title | escape }}">
+  <meta property="og:locale" content="en_US">
+  
+  <!-- Additional Open Graph properties for better platform support -->
+  <meta property="og:updated_time" content="{% if page.date %}{{ page.date | date_to_xmlschema }}{% else %}{{ site.time | date_to_xmlschema }}{% endif %}">
+  <meta property="og:determiner" content="the">
+  
+  <!-- Facebook-specific properties -->
+  <meta property="fb:app_id" content="">
+  
+  <!-- LinkedIn-specific -->
+  <meta property="og:see_also" content="{{ base_site_url }}">
+  {% if page.date %}
     <meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}">
     <meta property="article:author" content="Bitpanda Labs">
     {% if page.categories %}
@@ -57,22 +75,75 @@
     <meta property="article:tag" content="{{ category }}">
       {% endfor %}
     {% endif %}
-    
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@bitpanda">
-    <meta name="twitter:creator" content="@bitpanda">
-    <meta name="twitter:title" content="{{ page.title | escape }}">
-    <meta name="twitter:description" content="{{ page.excerpt | strip_html | truncate: 200 | escape }}">
-    <meta name="twitter:image" content="{{ base_site_url }}{{ experiment_png }}">
-    <meta name="twitter:image:alt" content="{{ page.title | escape }}">
-    <meta name="twitter:domain" content="{{ base_site_url | remove: 'http://' | remove: 'https://' }}">
-    
-    <!-- Additional SEO Meta Tags -->
-    <meta name="description" content="{{ page.excerpt | strip_html | escape }}">
-    <meta name="author" content="Bitpanda Labs">
-    <link rel="canonical" href="{{ base_site_url }}{{ page.url }}">
   {% endif %}
+  
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@bitpanda">
+  <meta name="twitter:creator" content="@bitpanda">
+  <meta name="twitter:title" content="{{ page_title | escape }}">
+  <meta name="twitter:description" content="{{ page_description | escape }}">
+  {% if page.layout == 'experiment' %}
+    <meta name="twitter:image" content="{{ base_site_url }}{{ experiment_png }}">
+    <meta name="twitter:image:src" content="{{ base_site_url }}{{ experiment_png }}">
+  {% else %}
+    <meta name="twitter:image" content="{{ page_image }}">
+    <meta name="twitter:image:src" content="{{ page_image }}">
+  {% endif %}
+  <meta name="twitter:image:alt" content="{{ page_title | escape }}">
+  <meta name="twitter:domain" content="{{ base_site_url | remove: 'http://' | remove: 'https://' }}">
+  <meta name="twitter:url" content="{{ base_site_url }}{{ page.url }}">
+  
+  <!-- Additional Twitter properties -->
+  <meta name="twitter:label1" content="Reading time">
+  <meta name="twitter:data1" content="{% if page.layout == 'experiment' %}5 min read{% else %}2 min read{% endif %}">
+  <meta name="twitter:label2" content="Category">
+  <meta name="twitter:data2" content="{% if page.layout == 'experiment' %}Fintech Innovation{% else %}Innovation Lab{% endif %}">
+  
+  <!-- Additional SEO Meta Tags -->
+  <meta name="description" content="{{ page_description | escape }}">
+  <meta name="author" content="Bitpanda Labs">
+  <meta name="publisher" content="Bitpanda Labs">
+  <meta name="robots" content="index, follow">
+  <meta name="googlebot" content="index, follow">
+  <link rel="canonical" href="{{ base_site_url }}{{ page.url }}">
+  
+  <!-- WhatsApp and Telegram optimization -->
+  <meta property="telegram:channel" content="@bitpanda">
+  
+  <!-- Schema.org structured data for better platform recognition -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "{% if page.layout == 'experiment' %}Article{% else %}WebSite{% endif %}",
+    "name": "{{ page_title | escape | jsonify }}",
+    "headline": "{{ page_title | escape | jsonify }}",
+    "description": "{{ page_description | escape | jsonify }}",
+    "url": "{{ base_site_url }}{{ page.url }}",
+    "image": {
+      "@type": "ImageObject",
+      "url": "{% if page.layout == 'experiment' %}{{ base_site_url }}{{ experiment_png }}{% else %}{{ page_image }}{% endif %}",
+      "width": 1200,
+      "height": 675
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Bitpanda Labs",
+      "url": "{{ base_site_url }}",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "{{ base_site_url }}/assets/Bitpanda_Lettermark_white_RGB.png"
+      }
+    }{% if page.layout == 'experiment' and page.date %},
+    "datePublished": "{{ page.date | date_to_xmlschema }}",
+    "dateModified": "{{ page.date | date_to_xmlschema }}",
+    "author": {
+      "@type": "Organization",
+      "name": "Bitpanda Labs"
+    }{% endif %}
+  }
+  </script>
+  
 </head>
 <body>
   <header>
