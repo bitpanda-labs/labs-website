@@ -17,7 +17,6 @@
   {% if page.layout == 'experiment' %}
     {% assign page_title = page.title %}
     {% assign page_description = page.excerpt | strip_html | strip_newlines | truncate: 160 %}
-    {% comment %} Normalize base URL; ensure it ends with a single trailing slash {% endcomment %}
     {% assign base_url = page.url
       | remove: 'index.html'
       | remove: '/index/'
@@ -26,7 +25,8 @@
     {% unless base_url contains '/experiments/' %}
       {% assign base_url = '/experiments' | append: base_url %}
     {% endunless %}
-    {% if base_url | slice: -1, 1 != '/' %}
+    {% assign last_char = base_url | slice: -1, 1 %}
+    {% if last_char != '/' %}
       {% assign base_url = base_url | append: '/' %}
     {% endif %}
     {% assign base_url = base_url | replace: '//', '/' %}
@@ -147,9 +147,9 @@
   {
     "@context": "https://schema.org",
     "@type": "{% if page.layout == 'experiment' %}Article{% else %}WebSite{% endif %}",
-    "name": "{{ page_title | escape | jsonify }}",
-    "headline": "{{ page_title | escape | jsonify }}",
-    "description": "{{ page_description | escape | jsonify }}",
+    "name": {{ page_title | jsonify }},
+    "headline": {{ page_title | jsonify }},
+    "description": {{ page_description | jsonify }},
     "url": "{{ base_site_url }}{{ page.url | replace: '/index/', '/' | replace: 'index.html', '' }}",
     "image": {
       "@type": "ImageObject",
