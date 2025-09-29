@@ -17,12 +17,19 @@
   {% if page.layout == 'experiment' %}
     {% assign page_title = page.title %}
     {% assign page_description = page.excerpt | strip_html | strip_newlines | truncate: 160 %}
-    {% comment %} Fix URL path - remove /index/ suffix and ensure single trailing slash {% endcomment %}
-    {% assign base_url = page.url | remove: '/index/' | remove: 'index.html' %}
+    {% comment %} Normalize base URL; ensure it ends with a single trailing slash {% endcomment %}
+    {% assign base_url = page.url
+      | remove: 'index.html'
+      | remove: '/index/'
+      | remove: 'index/' %}
     {% if base_url == '' %}{% assign base_url = '/' %}{% endif %}
     {% unless base_url contains '/experiments/' %}
       {% assign base_url = '/experiments' | append: base_url %}
     {% endunless %}
+    {% if base_url | slice: -1, 1 != '/' %}
+      {% assign base_url = base_url | append: '/' %}
+    {% endif %}
+    {% assign base_url = base_url | replace: '//', '/' %}
     {% comment %} Build image paths for experiment (avoid double slashes) {% endcomment %}
     {% assign experiment_jpg = base_url | append: 'image.jpg' %}
     {% assign experiment_png = base_url | append: 'image.png' %}
@@ -46,12 +53,10 @@
   <meta property="og:image" content="{{ page_image }}">
   <meta property="og:image:secure_url" content="{{ page_image }}">
   {% if page.layout == 'experiment' and page_image_alt != page_image %}
-    <!-- Provide alternative image format as backup -->
     <meta property="og:image" content="{{ page_image_alt }}">
     <meta property="og:image:secure_url" content="{{ page_image_alt }}">
   {% endif %}
   {% if page.layout == 'experiment' %}
-    <!-- Always provide fallback image -->
     <meta property="og:image" content="{{ fallback_image }}">
     <meta property="og:image:secure_url" content="{{ fallback_image }}">
   {% endif %}
@@ -145,7 +150,7 @@
     "name": "{{ page_title | escape | jsonify }}",
     "headline": "{{ page_title | escape | jsonify }}",
     "description": "{{ page_description | escape | jsonify }}",
-    "url": "{{ base_site_url }}{{ page.url }}",
+    "url": "{{ base_site_url }}{{ page.url | replace: '/index/', '/' | replace: 'index.html', '' }}",
     "image": {
       "@type": "ImageObject",
       "url": "{% if page.layout == 'experiment' %}{{ base_site_url }}{{ experiment_png }}{% else %}{{ page_image }}{% endif %}",
