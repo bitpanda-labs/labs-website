@@ -23,9 +23,9 @@
     {% unless base_url contains '/experiments/' %}
       {% assign base_url = '/experiments' | append: base_url %}
     {% endunless %}
-    {% comment %} Build image paths for experiment {% endcomment %}
-    {% assign experiment_jpg = base_url | append: '/image.jpg' %}
-    {% assign experiment_png = base_url | append: '/image.png' %}
+    {% comment %} Build image paths for experiment (avoid double slashes) {% endcomment %}
+    {% assign experiment_jpg = base_url | append: 'image.jpg' %}
+    {% assign experiment_png = base_url | append: 'image.png' %}
     {% comment %} For social sharing, try JPG first since most experiments use JPG {% endcomment %}
     {% assign page_image = base_site_url | append: experiment_jpg %}
     {% assign page_image_alt = base_site_url | append: experiment_png %}
@@ -65,7 +65,7 @@
   <meta property="og:image:alt" content="{{ page_title | escape }}">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:type" content="image/jpeg">
-  <meta property="og:url" content="{{ base_site_url }}{{ page.url }}">
+  <meta property="og:url" content="{{ base_site_url }}{{ page.url | replace: '/index/', '/' | replace: 'index.html', '' }}">
   <meta property="og:type" content="{% if page.layout == 'experiment' %}article{% else %}website{% endif %}">
   <meta property="og:site_name" content="{{ site.title | escape }}">
   <meta property="og:locale" content="en_US">
@@ -120,7 +120,7 @@
     <meta name="twitter:image:height" content="675">
   {% endif %}
   <meta name="twitter:domain" content="{{ base_site_url | remove: 'http://' | remove: 'https://' }}">
-  <meta name="twitter:url" content="{{ base_site_url }}{{ page.url }}">
+  <meta name="twitter:url" content="{{ base_site_url }}{{ page.url | replace: '/index/', '/' | replace: 'index.html', '' }}">
   
   <!-- Additional Twitter properties -->
   <meta name="twitter:label1" content="Reading time">
@@ -134,7 +134,7 @@
   <meta name="publisher" content="Bitpanda Labs">
   <meta name="robots" content="index, follow">
   <meta name="googlebot" content="index, follow">
-  <link rel="canonical" href="{{ base_site_url }}{{ page.url }}">
+  <link rel="canonical" href="{{ base_site_url }}{{ page.url | replace: '/index/', '/' | replace: 'index.html', '' }}">
   
   <!-- WhatsApp and Telegram optimization -->
   <meta property="telegram:channel" content="@bitpanda">
