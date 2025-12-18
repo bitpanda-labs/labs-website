@@ -39,6 +39,7 @@ first time, it might be that it isn't styled yet, so please make sure it looks n
 Common categories include:
 - AI & Machine Learning
 - User Experience
+- Developer Experience
 - Blockchain & DeFi
 - Payment Innovation
 - Security & Privacy
