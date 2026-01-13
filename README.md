@@ -115,7 +115,7 @@ bundle exec jekyll build
 
 ## 📋 Development Workflow
 
-1. **Create feature branch:** `git checkout -b feature/your-feature`
+1. **Create feature branch:** `git checkout -b feature/your-feature-name`
 2. **Make changes** and test locally
 3. **Commit changes:** Follow conventional commit format
 4. **Push and create PR:** Submit for review
