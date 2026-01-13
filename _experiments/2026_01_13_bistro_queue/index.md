@@ -38,7 +38,7 @@ This data helps employees decide the best time to grab their coffee or lunch wit
 ![Bistro Queue website](/experiments/2026_01_13_bistro_queue/img/02_bistro_site.png)
 
 **1. Real-Time Person Detection**<br>
-We integrated [YOLO](hhttps://github.com/ultralytics/ultralytics) (You Only Look Once) models to detect and count people in the camera's view. The model processes the webcam feed continuously, identifying individuals in the frame with impressive accuracy.
+We integrated [YOLO](https://github.com/ultralytics/ultralytics) (You Only Look Once) models to detect and count people in the camera's view. The model processes the webcam feed continuously, identifying individuals in the frame with impressive accuracy.
 
 **2. Defining the Queue Area**<br>
 We quickly ran into a practical challenge: not everyone in the camera view is actually in the queue. Some people are leaving, some are sitting at tables, and others are just passing by.
@@ -52,7 +52,7 @@ We built a configuration panel that lets you draw a specific area on the camera 
 Here's what made this possible so quickly: **everything** was built with Claude Code.
 
 When we say everything, we mean:
-- Backend in Python with [YOLO](hhttps://github.com/ultralytics/ultralytics) integration
+- Backend in Python with [YOLO](https://github.com/ultralytics/ultralytics) integration
 - The vanilla HTML/CSS/JS frontend
 - The server configuration (nginx setup)
 - SSL certificates for secure access
