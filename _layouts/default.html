@@ -5,7 +5,22 @@
   <title>{{ page_title | escape }}</title>
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
   <link rel="icon" href="{{ '/favicon.svg' | relative_url }}" type="image/svg+xml">
-  
+
+  <script>
+    function handleImageError(img, fallbackPath, defaultPath) {
+      img.onerror = null;
+      if (img.src.includes('.jpg')) {
+        img.onerror = function() {
+          img.onerror = null;
+          img.src = defaultPath;
+        };
+        img.src = fallbackPath;
+      } else {
+        img.src = defaultPath;
+      }
+    }
+  </script>
+
   {% comment %} Generate absolute URLs for social sharing {% endcomment %}
   {% if jekyll.environment == 'production' %}
     {% assign base_site_url = site.url %}
@@ -187,11 +202,7 @@
       </div>
       <div class="nav-links">
         <a href="/" class="nav-link" data-section="">Home</a>
-        {% if page.url == '/' %}
-          <a href="#experiments" class="nav-link" data-section="experiments">Experiments</a>
-        {% else %}
-          <a href="/experiments" class="nav-link" data-section="experiments">Experiments</a>
-        {% endif %}
+        <a href="/experiments" class="nav-link" data-section="experiments">Experiments</a>
         {% if page.url == '/' %}
           <a href="#about" class="nav-link" data-section="about">About</a>
         {% else %}
@@ -359,24 +370,6 @@
   </script>
 
   <script>
-    // Handle image loading errors silently
-    function handleImageError(img, fallbackPath, defaultPath) {
-      // Remove error handler to avoid infinite loops
-      img.onerror = null;
-      
-      // If current src contains .jpg, try PNG
-      if (img.src.includes('.jpg')) {
-        img.onerror = function() {
-          img.onerror = null;
-          img.src = defaultPath;
-        };
-        img.src = fallbackPath;
-      } else {
-        // Already tried PNG or other format, use default
-        img.src = defaultPath;
-      }
-    }
-
     // Handle active state and smooth scrolling for navigation links
     function updateActiveLink() {
       const hash = window.location.hash.slice(1) || '';
