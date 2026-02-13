@@ -202,11 +202,7 @@
       </div>
       <div class="nav-links">
         <a href="/" class="nav-link" data-section="">Home</a>
-        {% if page.url == '/' %}
-          <a href="#experiments" class="nav-link" data-section="experiments">Experiments</a>
-        {% else %}
-          <a href="/experiments" class="nav-link" data-section="experiments">Experiments</a>
-        {% endif %}
+        <a href="/experiments" class="nav-link" data-section="experiments">Experiments</a>
         {% if page.url == '/' %}
           <a href="#about" class="nav-link" data-section="about">About</a>
         {% else %}
