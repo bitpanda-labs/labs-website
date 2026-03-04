@@ -1,7 +1,7 @@
 ---
 layout: experiment
 title: "Smart Search"
-date: 2026-03-02
+date: 2026-03-04
 categories: ["AI & Machine Learning", "User Experience"]
 excerpt: "We redesigned our Search feature to handle real-world behaviors. The new Smart Search combines a scalable search engine with AI-powered features to deliver relevant results no matter how a query is expressed."
 action: "Learn more"
