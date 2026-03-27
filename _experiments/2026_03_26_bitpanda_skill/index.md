@@ -4,7 +4,7 @@ title: "Talk to Your Portfolio: The New Bitpanda AI Skill is Live"
 date: 2026-03-26
 categories: ["AI & Machine Learning", "User Experience"]
 excerpt: "We built a lightweight CLI skill that lets AI agents read your Bitpanda account. When the first version was too slow, we just asked Claude to fix the code, dropping response times from 10 minutes to under a minute."
-action: "Try out"
+action: "Learn more"
 ---
 
 We built a tool that lets AI agents talk directly to your Bitpanda account. It worked, but the initial version was painfully slow. Instead of manually profiling the code, we just fed it right back into the AI and asked it to fix the bottlenecks. A few iterations later, response times plummeted from 10 minutes to under 60 seconds. Here’s how we built it.
