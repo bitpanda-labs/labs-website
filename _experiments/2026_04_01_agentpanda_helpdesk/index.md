@@ -1,7 +1,7 @@
 ---
 layout: experiment
 title: "AgentPanda Helpdesk: Turning Plain English into Service Requests"
-date: 2026-04-01
+date: 2026-04-02
 categories: ["AI & Machine Learning", "Developer Experience"]
 excerpt: "We built a Slack command that turns plain-language descriptions into fully categorised, pre-filled Jira Service Management tickets. No more hunting through service catalogs, just describe what you need and AI does the rest."
 action: "Learn more"
