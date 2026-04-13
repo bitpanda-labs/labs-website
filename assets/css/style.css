@@ -324,10 +324,10 @@ section h2 {
 .post-card .card-link {
   position: absolute;
   inset: 0;
-  z-index: 1;
+  z-index: 2;
 }
 .post-card .card-body,
-.post-card .card-image { position: relative; z-index: 2; }
+.post-card .card-image { position: relative; z-index: 1; }
 .post-card .card-actions .btn { position: relative; z-index: 3; }
 
 /* Vertical post-style card (image on top) */
