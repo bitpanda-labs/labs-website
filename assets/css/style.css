@@ -885,7 +885,7 @@ body.js-ready .experiment-hero-block.revealed {
   color: rgb(16, 62, 54);
   margin-top: 40px;
   line-height: 125%;
-  border-left: 4px solid #2cec9a;
+  border-left: 4px solid var(--panda-green);
   padding-left: 24px;
   position: relative;
   z-index: 1;
