@@ -27,7 +27,7 @@ layout: default
         </div>
         <time class="experiment-date">{{ page.date | date: "%B %d, %Y" }}</time>
       </div>
-      <div class="experiment-hero-wrap">
+      <div class="experiment-hero-wrap reveal">
         {% assign default_img = '/assets/img/image.jpg' %}
         {% assign png_path = base_url | append: 'image.png' %}
         {% assign jpg_path = base_url | append: 'image.jpg' %}
@@ -36,7 +36,7 @@ layout: default
         {% assign hero_image = jpg_path %}
         <img class="experiment-hero-block" src="{{ hero_image | relative_url }}" alt="{{ page.title | escape }}" onerror="handleImageError(this, '{{ png_path | relative_url }}', '{{ default_img | relative_url }}')" />
       </div>
-      <div class="experiment-excerpt">
+      <div class="experiment-excerpt reveal">
         {{ page.excerpt | default: "Discover how we're pushing the boundaries of financial technology." }}
       </div>
     </header>
