@@ -191,7 +191,7 @@
   </script>
   
 </head>
-<body{% if page.layout == 'experiment' %} class="experiment-layout"{% endif %}>
+<body{% if page.layout == 'experiment' %} class="experiment-layout"{% elsif page.url == '/' %} class="has-hero"{% endif %}>
   <header>
     <nav class="nav-container">
       <div class="nav-brand">
@@ -215,6 +215,7 @@
     {{ content }}
   </main>
   <footer>
+    <div class="footer-copyright">&copy; {{ 'now' | date: '%Y' }} Bitpanda Labs</div>
     <ul>
       <li><a href="https://www.bitpanda.com/?utm_source=bitpanda_labs&utm_medium=website&utm_campaign=labs_footer" target="_blank">Go to Bitpanda.com</a></li>
       <li><a href="https://www.bitpanda.com/en/about-us" target="_blank">About Bitpanda</a></li>
@@ -242,6 +243,74 @@
       </div>
     </div>
   </div>
+
+  <!-- Scroll Reveal & Header Glassmorphism -->
+  <script>
+  (function() {
+    'use strict';
+
+    // Signal that JS is running — enables animation hiding
+    document.body.classList.add('js-ready');
+
+    // --- Header scroll detection ---
+    if (document.body.classList.contains('has-hero')) {
+      var hero = document.querySelector('.hero');
+      var scrollThreshold = 80;
+
+      function onScroll() {
+        if (window.scrollY > scrollThreshold) {
+          document.body.classList.add('header-scrolled');
+        } else {
+          document.body.classList.remove('header-scrolled');
+        }
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+
+      // Trigger hero entrance
+      if (hero) {
+        requestAnimationFrame(function() {
+          hero.classList.add('hero-visible');
+        });
+
+      }
+    }
+
+    // --- Intersection Observer for scroll reveals ---
+    var revealElements = document.querySelectorAll('.reveal, .reveal-children');
+    if (revealElements.length > 0 && 'IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -60px 0px'
+      });
+
+      revealElements.forEach(function(el) {
+        observer.observe(el);
+      });
+    }
+
+    // --- Experiment hero image reveal ---
+    var heroImg = document.querySelector('.experiment-hero-block');
+    if (heroImg && 'IntersectionObserver' in window) {
+      var imgObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+            imgObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      imgObserver.observe(heroImg);
+    }
+  })();
+  </script>
 
   <!-- Cookie Consent & Analytics Management -->
   <script>
@@ -303,6 +372,13 @@
       },
       "undefined"==typeof Promise||"undefined"==typeof globalThis?window.rudderAnalyticsAddScript("https://polyfill-fastly.io/v3/polyfill.min.js?version=3.111.0&features=Symbol%2CPromise&callback=rudderAnalyticsMount"):window.rudderAnalyticsMount()
       ;var loadOptions={};rudderanalytics.load("38CkLWnKmZjzNGHOIsGgd4NPjK8","https://rudderstaczkxy.dataplane.rudderstack.com",loadOptions)}}}();
+
+      // Load RudderStack analytics (called after consent)
+      function loadRudderStack() {
+        if (window.rudderanalytics && typeof window.rudderanalytics.page === 'function') {
+          window.rudderanalytics.page();
+        }
+      }
 
       // Show cookie banner
       function showBanner() {
@@ -406,7 +482,7 @@
         const targetElement = document.getElementById(targetId);
         if (!targetElement) return;
 
-        const headerOffset = 100; // Adjust this value based on your header height
+        const headerOffset = 74; // Adjust this value based on your header height
         const elementPosition = targetElement.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
