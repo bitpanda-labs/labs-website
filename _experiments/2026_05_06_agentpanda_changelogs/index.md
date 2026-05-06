@@ -24,6 +24,7 @@ Currently, updates are distributed across the following channels and more:
 - `#vendor-ai`
 - `#vendor-devops`
 - `#vendor-engineering`
+- and more…
 
 # The Takeaway
 
@@ -31,4 +32,4 @@ This automation transforms vendor monitoring from a reactive, manual task into a
 
 # What's Next
 
-With this initiative, Labs continues to focus on reducing friction through intelligent automation. By centralising vendor intelligence and embedding it directly into existing workflows, Bitpanda ensures that critical updates are visible, digestible and actionable — without adding new processes or complexity.
+With this initiative, Labs continues to focus on reducing friction through intelligent automation. By centralising vendor intelligence and embedding it directly into existing workflows, Bitpanda ensures that critical updates are visible, digestible and actionable - without adding new processes or complexity.
