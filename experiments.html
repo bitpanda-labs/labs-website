@@ -10,6 +10,24 @@ permalink: /experiments/
     {% assign experiments_filtered = site.experiments | where_exp: "experiment", "experiment.date <= site.time" %}
     {% assign experiments_sorted = experiments_filtered | sort: 'date' | reverse %}
     {% if experiments_filtered.size > 0 %}
+      {% assign all_categories = "" | split: "" %}
+      {% for experiment in experiments_sorted %}
+        {% assign exp_labels = experiment.labels | default: experiment.categories %}
+        {% if exp_labels %}
+          {% assign all_categories = all_categories | concat: exp_labels %}
+        {% endif %}
+      {% endfor %}
+      {% assign categories = all_categories | uniq | sort_natural %}
+
+      {% if categories.size > 0 %}
+        <nav class="filter-bar reveal" aria-label="Filter experiments by category">
+          <button type="button" class="filter-pill is-active" data-category="all" aria-pressed="true">All</button>
+          {% for category in categories %}
+            <button type="button" class="filter-pill" data-category="{{ category | downcase | escape }}" aria-pressed="false">{{ category }}</button>
+          {% endfor %}
+        </nav>
+      {% endif %}
+
       <div class="cards">
         {% for experiment in experiments_sorted %}
           {% assign default_img = '/assets/img/image.jpg' %}
@@ -20,7 +38,8 @@ permalink: /experiments/
           {% comment %} Default to JPG, fall back to PNG, then default {% endcomment %}
           {% assign card_image = jpg_path %}
           {% assign labels = experiment.labels | default: experiment.categories %}
-          <article class="card post-card reveal">
+          {% if labels %}{% assign card_categories = labels | join: "|" | downcase %}{% else %}{% assign card_categories = "" %}{% endif %}
+          <article class="card post-card reveal" data-categories="{{ card_categories | escape }}">
             <a class="card-link" href="{{ experiment.url | relative_url }}" aria-label="Open {{ experiment.title | escape }}"></a>
             <div class="card-image">
               <img src="{{ card_image | relative_url }}" alt="{{ experiment.title | escape }}" onerror="handleImageError(this, '{{ png_path | relative_url }}', '{{ default_img | relative_url }}')" />
@@ -45,6 +64,7 @@ permalink: /experiments/
           </article>
         {% endfor %}
       </div>
+      <p class="no-results" hidden>No experiments in this category yet.</p>
     {% else %}
       <div class="card coming-soon">
         <h3>Exciting Experiments Coming Soon</h3>
@@ -53,5 +73,85 @@ permalink: /experiments/
     {% endif %}
   </section>
 </div>
+
+<script>
+(function () {
+  'use strict';
+
+  var bar = document.querySelector('.filter-bar');
+  if (!bar) return;
+
+  var pills = Array.prototype.slice.call(bar.querySelectorAll('.filter-pill'));
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.cards .post-card'));
+  var noResults = document.querySelector('.no-results');
+
+  function reveal(card) {
+    if (!document.body.classList.contains('js-ready')) return;
+    card.classList.remove('revealed');
+    void card.offsetWidth;
+    requestAnimationFrame(function () {
+      card.classList.add('revealed');
+    });
+  }
+
+  function normalize(value) {
+    return (value || '').trim().toLowerCase();
+  }
+
+  function apply(category, updateHistory) {
+    var selected = normalize(category) || 'all';
+
+    var match = pills.filter(function (p) { return p.getAttribute('data-category') === selected; })[0];
+    if (!match) {
+      selected = 'all';
+      match = pills.filter(function (p) { return p.getAttribute('data-category') === 'all'; })[0];
+    }
+
+    pills.forEach(function (p) {
+      var active = p === match;
+      p.classList.toggle('is-active', active);
+      p.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+
+    var visible = 0;
+    cards.forEach(function (card) {
+      var cats = normalize(card.getAttribute('data-categories')).split('|');
+      var show = selected === 'all' || cats.indexOf(selected) !== -1;
+      card.hidden = !show;
+      if (show) {
+        visible++;
+        reveal(card);
+      }
+    });
+
+    if (noResults) noResults.hidden = visible !== 0;
+
+    if (updateHistory) {
+      var url = window.location.pathname;
+      if (selected !== 'all') {
+        url += '?category=' + encodeURIComponent(selected);
+      }
+      history.pushState({ category: selected }, '', url);
+    }
+  }
+
+  function fromUrl() {
+    var params = new URLSearchParams(window.location.search);
+    return params.get('category') || 'all';
+  }
+
+  pills.forEach(function (pill) {
+    pill.addEventListener('click', function () {
+      apply(pill.getAttribute('data-category'), true);
+    });
+  });
+
+  window.addEventListener('popstate', function () {
+    apply(fromUrl(), false);
+  });
+
+  apply(fromUrl(), false);
+})();
+</script>
 
 

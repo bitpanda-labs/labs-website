@@ -19,7 +19,7 @@ layout: default
           {% assign labels = page.labels | default: page.categories %}
           {% if labels %}
             {% for label in labels %}
-              <span class="label">{{ label }}</span>
+              <a class="label label-link" href="{{ '/experiments/' | relative_url }}?category={{ label | downcase | url_encode }}">{{ label }}</a>
             {% endfor %}
           {% else %}
             <span class="label">Experiment</span>
