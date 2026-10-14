@@ -16,6 +16,13 @@ bundle exec jekyll build
 
 Ruby 3.3 is required (`.ruby-version` specifies `3.3`). If `bundle` is not found, install it with `gem install bundler` and re-run.
 
+The `Gemfile` sets `Encoding.default_external`/`default_internal` to UTF-8 before Bundler
+loads any gems. Do not remove those two lines: when `LANG`/`LC_ALL` are unset, Ruby falls back
+to US-ASCII and Sass rejects the non-ASCII characters in a transitive gem dependency's
+stylesheet (`jekyll-theme-primer`), aborting the build with a misleading
+`Invalid US-ASCII character "\xE2"` error attributed to `assets/css/style.scss` — a file this
+repo does not contain. A `_plugins/` hook cannot fix this; plugins load after Sass runs.
+
 ## Commit conventions
 
 This project uses [Conventional Commits](https://www.conventionalcommits.org/).
