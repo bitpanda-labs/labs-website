@@ -1,3 +1,11 @@
+# Ruby defaults Encoding.default_external to US-ASCII when LANG/LC_ALL are unset.
+# Sass then rejects the non-ASCII bytes in our gem dependencies' stylesheets
+# (see jekyll-theme-primer's typography.scss), failing the build with a
+# misleading error about 'assets/css/style.scss'. Bundler evaluates this file
+# before Jekyll and Sass load, which is early enough to set the encoding.
+Encoding.default_external = Encoding::UTF_8
+Encoding.default_internal = Encoding::UTF_8
+
 source "https://rubygems.org"
 # Hello! This is where you manage which Jekyll version is used to run.
 # When you want to use a different version, change it below, save the
